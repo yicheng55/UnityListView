@@ -27,6 +27,7 @@ public class DemoMain : MonoBehaviour
 	#endregion
 	private string serverMessage;
 
+	List<string> mListMsg = new List<string>();
 
 	// Start is called before the first frame update
 	void Start()
@@ -35,7 +36,7 @@ public class DemoMain : MonoBehaviour
 		tbx_Port.text = "21087";
 	}
 
-		private void Update()
+	private void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
@@ -73,11 +74,23 @@ public class DemoMain : MonoBehaviour
 		//    }
 		//}
 
-		if (serverMessage != null)
-		{
-			AddItem(listViewVertical, itemVPrefab, serverMessage);
-			serverMessage = null;
+		//if (serverMessage != null)
+		//{
+		//	AddItem(listViewVertical, itemVPrefab, serverMessage);
+		//	serverMessage = null;
+		//}
+
+		if(mListMsg.Count != 0)
+        {
+			foreach (string myStringList in mListMsg)
+			{
+				Debug.Log(myStringList);
+				AddItem(listViewVertical, itemVPrefab, myStringList);
+			}
+			mListMsg.Clear();
 		}
+
+
 	}
 
 	public void ConnectButton()
@@ -209,6 +222,7 @@ public class DemoMain : MonoBehaviour
 						// Convert byte array to string message.
 						serverMessage = Encoding.ASCII.GetString(incommingData);
 						Debug.Log("server message received as: " + serverMessage);
+						mListMsg.Add(serverMessage);
 
 					}
 				}
