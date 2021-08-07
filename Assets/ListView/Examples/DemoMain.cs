@@ -32,8 +32,64 @@ public class DemoMain : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		tbx_IpAddr.text = "127.0.0.1";
-		tbx_Port.text = "21087";
+		int counter = 0, index=0;
+		string line;
+		//tbx_IpAddr.text = "127.0.0.1";
+		//tbx_Port.text = "21087";
+
+
+		string sPattern = "^#";
+		// Read the file and display it line by line.  
+		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
+		while ((line = file.ReadLine()) != null)
+		{
+			if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
+			{
+				Debug.Log(" - valid");
+			}
+			else
+			{
+				//Debug.Log(line);
+				//Debug.Log(" - invalid");
+				switch(index)
+                {
+					case 0:
+						tbx_IpAddr.text = line;
+						Debug.Log("Case= " + index +"  line: " + line);
+						break;
+					case 1:
+						tbx_Port.text = line;
+						Debug.Log("Case= " + index + "  line: " + line);
+						break;
+
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+					case 10:
+					case 11:
+						tbx_Txt[index - 2].text = line;
+						Debug.Log("Case= " + index + "  line: " + line);
+						break;
+
+					default:
+						Debug.Log("Case= " + index + "  line: " + line);
+						break;
+
+
+				}
+				index++;
+			}
+
+			counter++;
+		}
+
+		file.Close();
+		Debug.Log("There were lines=" + counter);
 	}
 
 	private void Update()
@@ -74,11 +130,6 @@ public class DemoMain : MonoBehaviour
 		//    }
 		//}
 
-		//if (serverMessage != null)
-		//{
-		//	AddItem(listViewVertical, itemVPrefab, serverMessage);
-		//	serverMessage = null;
-		//}
 
 		if(mListMsg.Count != 0)
         {
@@ -96,6 +147,12 @@ public class DemoMain : MonoBehaviour
 	public void ConnectButton()
 	{
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+		Debug.Log("ItemCount: " + listViewVertical.ItemCount);
+		if (listViewVertical.ItemCount > 0)
+        {
+			RemoveItemAll(listViewVertical);
+		}
+
 		ConnectToTcpServer();
 	}
 
@@ -132,7 +189,9 @@ public class DemoMain : MonoBehaviour
 		}
 		catch (SocketException socketException)
 		{
+			string clientMessage = "Socket Connection is fail !!!";
 			Debug.Log("Socket exception: " + socketException);
+			AddItem(listViewVertical, itemVPrefab, clientMessage);
 		}
 
 
@@ -192,7 +251,9 @@ public class DemoMain : MonoBehaviour
 		}
 		catch (Exception e)
 		{
+			string clientMessage = "Socket Connection is fail !!!";
 			Debug.Log("On client connect exception " + e);
+			AddItem(listViewVertical, itemVPrefab, clientMessage);
 		}
 	}
 	/// <summary>
@@ -231,6 +292,8 @@ public class DemoMain : MonoBehaviour
 		catch (SocketException socketException)
 		{
 			Debug.Log("Socket exception: " + socketException);
+			string clientMessage = "Socket Connection is fail !!!";
+			mListMsg.Add(clientMessage);
 		}
 	}
 	/// <summary>
