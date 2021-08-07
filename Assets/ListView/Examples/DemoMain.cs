@@ -112,7 +112,7 @@ public class DemoMain : MonoBehaviour
 		Debug.Log("AddItem msg: " + msg);
 		var item = Instantiate(prefab);
 
-		if (msg == null)
+		if (msg == "")
 		{
             item.SetContent(color.ToString(), color);
         }
