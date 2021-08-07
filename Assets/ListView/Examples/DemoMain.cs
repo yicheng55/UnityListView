@@ -37,19 +37,31 @@ public class DemoMain : MonoBehaviour
             }
         }
 
-        //if (Input.GetKeyDown(KeyCode.H))
-        //{
-        //    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
-        //    {
-        //        RemoveItem(listViewHorizontal);
-        //    }
-        //    else // h: add
-        //    {
-        //        AddItem(listViewHorizontal, itemHPrefab);
-        //    }
-        //}
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			if (Input.GetKey(KeyCode.LeftShift)) // shift + A: remove
+			{
+				RemoveItemAll(listViewVertical);
+			}
+			else // v: add
+			{
+				//AddItem(listViewVertical, itemVPrefab, serverMessage);
+			}
+		}
 
-        if (serverMessage != null)
+		//if (Input.GetKeyDown(KeyCode.H))
+		//{
+		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
+		//    {
+		//        RemoveItem(listViewHorizontal);
+		//    }
+		//    else // h: add
+		//    {
+		//        AddItem(listViewHorizontal, itemHPrefab);
+		//    }
+		//}
+
+		if (serverMessage != null)
 		{
 			AddItem(listViewVertical, itemVPrefab, serverMessage);
 			serverMessage = null;
@@ -133,6 +145,13 @@ public class DemoMain : MonoBehaviour
         Debug.Log("lv.ItemCount= " + lv.ItemCount);
     }
 
+	private void RemoveItemAll(ListView lv)
+	{
+		Debug.Log("lv.RemoveAllItems= " + lv.ItemCount);
+		//lv.RemoveBottom();
+		lv.RemoveAllItems();
+
+	}
 
 	/// <summary>
 	/// Setup socket connection.
