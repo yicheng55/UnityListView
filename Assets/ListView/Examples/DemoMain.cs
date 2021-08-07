@@ -33,23 +33,23 @@ public class DemoMain : MonoBehaviour
             }
             else // v: add
             {
-                AddItem(listViewVertical, itemVPrefab, serverMessage);
+                //AddItem(listViewVertical, itemVPrefab, serverMessage);
             }
         }
 
-		//if (Input.GetKeyDown(KeyCode.H))
-		//{
-		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
-		//    {
-		//        RemoveItem(listViewHorizontal);
-		//    }
-		//    else // h: add
-		//    {
-		//        AddItem(listViewHorizontal, itemHPrefab);
-		//    }
-		//}
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
+        //    {
+        //        RemoveItem(listViewHorizontal);
+        //    }
+        //    else // h: add
+        //    {
+        //        AddItem(listViewHorizontal, itemHPrefab);
+        //    }
+        //}
 
-		if (serverMessage != null)
+        if (serverMessage != null)
 		{
 			AddItem(listViewVertical, itemVPrefab, serverMessage);
 			serverMessage = null;
@@ -68,10 +68,37 @@ public class DemoMain : MonoBehaviour
 	//	SendMessage();
 	//}
 
-	public void SendButton(int x)
+	public void SendButton(int index)
 	{
-		AddItem(listViewVertical, itemVPrefab,null);
-		Debug.Log("SendButton= " + x);
+		Debug.Log("SendButton= " + index);
+		if (socketConnection == null)
+		{
+			string clientMessage = "SocketConnection is diasble!!!";
+			AddItem(listViewVertical, itemVPrefab, clientMessage);
+			return;
+		}
+		try
+		{
+			// Get a stream object for writing.
+			NetworkStream stream = socketConnection.GetStream();
+			if (stream.CanWrite)
+			{
+				//string clientMessage = "This is a message from one of your clients.";
+				string clientMessage = tbx_Txt[index].text;
+				// Convert string message to byte array.
+				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
+				// Write byte array to socketConnection stream.
+				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				Debug.Log("Client sent his message - should be received by server: " + clientMessage);
+				AddItem(listViewVertical, itemVPrefab, clientMessage);
+			}
+		}
+		catch (SocketException socketException)
+		{
+			Debug.Log("Socket exception: " + socketException);
+		}
+
+
 	}
 	private void AddItem(ListView lv, DemoItem prefab, string msg)
     {
@@ -82,10 +109,10 @@ public class DemoMain : MonoBehaviour
             b = UnityEngine.Random.Range(0.0f, 1.0f),
             a = 1.0f,
         };
+		Debug.Log("AddItem msg: " + msg);
+		var item = Instantiate(prefab);
 
-        var item = Instantiate(prefab);
-
-		if (serverMessage == null)
+		if (msg == null)
 		{
             item.SetContent(color.ToString(), color);
         }
