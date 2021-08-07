@@ -7,6 +7,7 @@ using System.Threading;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Text;
+using System.Net;
 
 public class DemoMain : MonoBehaviour
 {
@@ -17,13 +18,24 @@ public class DemoMain : MonoBehaviour
 
 	public InputField[] tbx_Txt;
 
+	public InputField tbx_IpAddr;
+	public InputField tbx_Port;
+
 	#region private members
 	private TcpClient socketConnection;
     private Thread clientReceiveThread;
 	#endregion
 	private string serverMessage;
 
-	private void Update()
+
+	// Start is called before the first frame update
+	void Start()
+	{
+		tbx_IpAddr.text = "127.0.0.1";
+		tbx_Port.text = "21087";
+	}
+
+		private void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
@@ -177,8 +189,12 @@ public class DemoMain : MonoBehaviour
 	{
 		try
 		{
-			socketConnection = new TcpClient("localhost", 8052);
-			Byte[] bytes = new Byte[1024];
+			string host = tbx_IpAddr.text;
+			//IPAddress ip = IPAddress.Parse(host);
+			Debug.Log("host: " + host + "  port: " + tbx_Port.text);
+            socketConnection = new TcpClient(host, Convert.ToInt16(tbx_Port.text));
+            //socketConnection = new TcpClient("localhost", 21087);
+            Byte[] bytes = new Byte[1024];
 			while (true)
 			{
 				// Get a stream object for reading
