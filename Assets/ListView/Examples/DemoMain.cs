@@ -165,7 +165,24 @@ public class DemoMain : MonoBehaviour
 		//m_Text.text = "Toggle is : " + m_Toggle.isOn;
 		//Debug.Log("Toggle is : " + change.isOn);
 		Debug.Log("Toggle is : " + change.isOn);
-		ConnectButton();
+		if(change.isOn == true)
+		{
+			if (socketConnection == null)
+			{
+				Debug.Log("ConnectButton();");
+				ConnectButton();
+			}
+		}
+		else
+		{
+			if (socketConnection != null)
+			{
+				Debug.Log("socketConnection.Close();");
+				socketConnection.Close();
+			}
+			//DisConnectButton();
+		}
+
 	}
 
 	//public void SendMessageButton()
@@ -329,7 +346,6 @@ public class DemoMain : MonoBehaviour
 				// Write byte array to socketConnection stream.
 				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 				Debug.Log("Client sent his message - should be received by server");
-				//textView.text = clientMessage;
 			}
 		}
 		catch (SocketException socketException)
