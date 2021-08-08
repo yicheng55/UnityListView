@@ -26,19 +26,23 @@ public class DemoMain : MonoBehaviour
     private Thread clientReceiveThread;
 	#endregion
 	private string serverMessage;
+    public Toggle m_ToggleConnect;
 
-	List<string> mListMsg = new List<string>();
+    List<string> mListMsg = new List<string>();
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		int counter = 0, index=0;
 		string line;
-		//tbx_IpAddr.text = "127.0.0.1";
-		//tbx_Port.text = "21087";
 
 
-		string sPattern = "^#";
+        //Fetch the Toggle GameObject
+        //m_ToggleConnect = GetComponent<Toggle>();
+        //Add listener for when the state of the Toggle changes, and output the state
+        m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
+
+        string sPattern = "^#";
 		// Read the file and display it line by line.  
 		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
 		while ((line = file.ReadLine()) != null)
@@ -131,7 +135,7 @@ public class DemoMain : MonoBehaviour
 		//}
 
 
-		if(mListMsg.Count != 0)
+		if(mListMsg.Count > 0)
         {
 			foreach (string myStringList in mListMsg)
 			{
@@ -154,6 +158,14 @@ public class DemoMain : MonoBehaviour
 		}
 
 		ConnectToTcpServer();
+	}
+
+	void ToggleValueChanged(Toggle change)
+	{
+		//m_Text.text = "Toggle is : " + m_Toggle.isOn;
+		//Debug.Log("Toggle is : " + change.isOn);
+		Debug.Log("Toggle is : " + change.isOn);
+		ConnectButton();
 	}
 
 	//public void SendMessageButton()
