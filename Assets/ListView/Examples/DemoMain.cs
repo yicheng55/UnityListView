@@ -103,7 +103,7 @@ public class DemoMain : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
             {
                 RemoveItem(listViewVertical);
-            }
+			}
             else // v: add
             {
                 //AddItem(listViewVertical, itemVPrefab, serverMessage);
@@ -253,8 +253,8 @@ public class DemoMain : MonoBehaviour
 
     private void RemoveItem(ListView lv)
     {
-        //lv.RemoveBottom();
-        lv.RemoveTop();
+        lv.RemoveBottom();
+        //lv.RemoveTop();
         Debug.Log("lv.ItemCount= " + lv.ItemCount);
     }
 
