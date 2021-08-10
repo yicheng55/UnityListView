@@ -179,6 +179,7 @@ public class DemoMain : MonoBehaviour
 			{
 				Debug.Log("socketConnection.Close();");
 				socketConnection.Close();
+				clientReceiveThread.Abort();
 			}
 			//DisConnectButton();
 		}
@@ -296,8 +297,10 @@ public class DemoMain : MonoBehaviour
 			//IPAddress ip = IPAddress.Parse(host);
 			Debug.Log("host: " + host + "  port: " + tbx_Port.text);
             socketConnection = new TcpClient(host, Convert.ToInt16(tbx_Port.text));
-            //socketConnection = new TcpClient("localhost", 21087);
-            Byte[] bytes = new Byte[1024];
+			//socketConnection = new TcpClient("localhost", 21087);
+			string clientMessage = "Socket Connection is successful !!!";
+			mListMsg.Add(clientMessage);
+			Byte[] bytes = new Byte[1024];
 			while (true)
 			{
 				// Get a stream object for reading
