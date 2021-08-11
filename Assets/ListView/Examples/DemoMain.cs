@@ -180,6 +180,8 @@ public class DemoMain : MonoBehaviour
 				Debug.Log("socketConnection.Close();");
 				socketConnection.Close();
 				clientReceiveThread.Abort();
+				string clientMessage = "Socket Connection is diasble!!!";
+				AddItem(listViewVertical, itemVPrefab, clientMessage);
 			}
 			//DisConnectButton();
 		}
