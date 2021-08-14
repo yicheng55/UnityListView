@@ -232,16 +232,17 @@ public class DemoMain : MonoBehaviour
     {
         var color = new Color()
         {
-            //r = UnityEngine.Random.Range(0.0f, 1.0f),
-            //g = UnityEngine.Random.Range(0.0f, 1.0f),
-            //b = UnityEngine.Random.Range(0.0f, 1.0f),
-            //r = UnityEngine.Random.Range(0.0f, 0.5f),
-            //g = UnityEngine.Random.Range(0.0f, 0.5f),
-            //b = UnityEngine.Random.Range(0.0f, 0.5f),
-            r = UnityEngine.Random.Range(0.3f, 1.0f),
+			//r = UnityEngine.Random.Range(0.0f, 1.0f),
+			//g = UnityEngine.Random.Range(0.0f, 1.0f),
+			//b = UnityEngine.Random.Range(0.0f, 1.0f),
+			//r = UnityEngine.Random.Range(0.0f, 0.5f),
+			//g = UnityEngine.Random.Range(0.0f, 0.5f),
+			//b = UnityEngine.Random.Range(0.0f, 0.5f),
+			//a = 1.0f,
+			r = UnityEngine.Random.Range(0.3f, 1.0f),
             g = UnityEngine.Random.Range(0.3f, 1.0f),
             b = UnityEngine.Random.Range(0.3f, 1.0f),
-            a = 1.0f,
+            a = 0.5f,
         };
 		Debug.Log("AddItem msg: " + msg);
 		var item = Instantiate(prefab);
