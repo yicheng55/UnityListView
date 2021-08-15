@@ -8,10 +8,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Text;
 using System.Net;
+using System.Timers;
 
 public class DemoMain : MonoBehaviour
 {
-    public ListView listViewVertical;
+	public Action<DemoMain> OnConnected = delegate { };
+	public Action<DemoMain> OnDisconnected = delegate { };
+	public Action<string> OnLog = delegate { };
+
+	public ListView listViewVertical;
     public ListView listViewHorizontal;
     public DemoItem itemVPrefab;
     public DemoItem itemHPrefab;
@@ -26,11 +31,24 @@ public class DemoMain : MonoBehaviour
     private Thread clientReceiveThread;
 	#endregion
 	private string serverMessage;
-    public Toggle m_ToggleConnect;
+	private bool running;
+	private static System.Timers.Timer aTimer;
+
+	public Toggle m_ToggleConnect;
 
     List<string> mListMsg = new List<string>();
 
-	// Start is called before the first frame update
+
+	private object cacheLock = new object();
+	private string cache;
+
+	private void Awake()
+	{
+		Debug.Log("Awake()");
+		OnLog += OnClientLog;
+	}
+
+		// Start is called before the first frame update
 	void Start()
 	{
 		int counter = 0, index=0;
@@ -42,7 +60,12 @@ public class DemoMain : MonoBehaviour
         //Add listener for when the state of the Toggle changes, and output the state
         m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
 
-        string sPattern = "^#";
+
+		aTimer = new System.Timers.Timer(200);
+		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
+		aTimer.Start();
+
+		string sPattern = "^#";
 		// Read the file and display it line by line.  
 		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
 		while ((line = file.ReadLine()) != null)
@@ -145,7 +168,22 @@ public class DemoMain : MonoBehaviour
 			mListMsg.Clear();
 		}
 
+		//lock (cacheLock)
+		//{
+		//	if (!string.IsNullOrEmpty(cache))
+		//	{
+		//		//TextWindow.text += string.Format("{0}", cache);
+		//		AddItem(listViewVertical, itemVPrefab, cache);
+		//		cache = null;
+		//	}
+		//}
 
+
+	}
+
+	private void OnTick(object source, ElapsedEventArgs e)
+	{
+		//print(e.SignalTime);
 	}
 
 	public void ConnectButton()
@@ -216,7 +254,8 @@ public class DemoMain : MonoBehaviour
 				// Write byte array to socketConnection stream.
 				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 				Debug.Log("Client sent his message - should be received by server: " + clientMessage);
-				AddItem(listViewVertical, itemVPrefab, clientMessage);
+				//AddItem(listViewVertical, itemVPrefab, clientMessage);
+				OnLog(clientMessage);
 			}
 		}
 		catch (SocketException socketException)
@@ -228,6 +267,29 @@ public class DemoMain : MonoBehaviour
 
 
 	}
+
+	private void OnClientLog(string message)
+	{
+		lock (cacheLock)
+		{
+			Debug.Log("OnClientLog: " + message);
+			//if (string.IsNullOrEmpty(cache))
+			//{
+			//	cache = string.Format("<color=black>{0}</color>\n", message);
+			//	//cache = string.Format("<color=red>{0}</color>\n", message);
+			//}
+			//else
+			//{
+			//	cache += string.Format("<color=black>{0}</color>\n", message);
+			//	//cache += string.Format("<color=red>{0}</color>\n", message);
+			//}
+
+			cache = string.Format("<color=black>{0}</color>\n", message);
+			mListMsg.Add(cache);
+		}
+	}
+
+
 	private void AddItem(ListView lv, DemoItem prefab, string msg)
     {
         var color = new Color()
@@ -310,25 +372,34 @@ public class DemoMain : MonoBehaviour
 			string clientMessage = "Socket Connection is successful !!!";
 			mListMsg.Add(clientMessage);
 			Byte[] bytes = new Byte[1024];
-			while (true)
+			running = true;
+			while (running)
 			{
 				// Get a stream object for reading
 				using (NetworkStream stream = socketConnection.GetStream())
 				{
 					int length;
 					// Read incomming stream into byte arrary.
-					while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+					while (running && stream.CanRead)
 					{
-						var incommingData = new byte[length];
-						Array.Copy(bytes, 0, incommingData, 0, length);
-						// Convert byte array to string message.
-						serverMessage = Encoding.ASCII.GetString(incommingData);
-						Debug.Log("server message received as: " + serverMessage);
-						mListMsg.Add(serverMessage);
 
+						while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+						{
+							var incommingData = new byte[length];
+							Array.Copy(bytes, 0, incommingData, 0, length);
+							// Convert byte array to string message.
+							serverMessage = Encoding.ASCII.GetString(incommingData);
+							Debug.Log("server message received as: " + serverMessage);
+							//mListMsg.Add(serverMessage);
+							OnLog(serverMessage);
+
+						}
 					}
 				}
 			}
+			socketConnection.Close();
+			Debug.Log("Disconnected from server");
+			//OnDisconnected(this);
 		}
 		catch (SocketException socketException)
 		{
