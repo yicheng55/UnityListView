@@ -186,6 +186,13 @@ public class DemoMain : MonoBehaviour
 		//print(e.SignalTime);
 	}
 
+
+	void OnDisable()
+	{
+		aTimer.Dispose();
+		print(aTimer == null);
+	}
+
 	public void ConnectButton()
 	{
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
