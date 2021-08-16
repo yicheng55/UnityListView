@@ -187,7 +187,7 @@ public class DemoMain : MonoBehaviour
 	}
 
 
-	void OnDisable()
+	private void OnDisable()
 	{
 		aTimer.Dispose();
 		print(aTimer == null);
