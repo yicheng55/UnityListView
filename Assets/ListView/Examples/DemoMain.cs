@@ -12,9 +12,9 @@ using System.Timers;
 
 public class DemoMain : MonoBehaviour
 {
-	public Action<DemoMain> OnConnected = delegate { };
-	public Action<DemoMain> OnDisconnected = delegate { };
-	public Action<string> OnLog = delegate { };
+	private List<TCPTestClient> clients = new List<TCPTestClient>();
+	//private TCPTestServer _server;
+	private TCPTestClient _client;
 
 	public ListView listViewVertical;
     public ListView listViewHorizontal;
@@ -26,10 +26,10 @@ public class DemoMain : MonoBehaviour
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
 
-	#region private members
-	private TcpClient socketConnection;
-    private Thread clientReceiveThread;
-	#endregion
+	////#region private members
+	////private TcpClient socketConnection;
+	////private Thread clientReceiveThread;
+	////#endregion
 	private string serverMessage;
 	private bool running;
 	private static System.Timers.Timer aTimer;
@@ -45,7 +45,11 @@ public class DemoMain : MonoBehaviour
 	private void Awake()
 	{
 		Debug.Log("Awake()");
-		OnLog += OnClientLog;
+		_client = GetComponent<TCPTestClient>();
+		_client.OnConnected += OnClientConnected;
+		_client.OnDisconnected += OnClientDisconnected;
+		_client.OnMessageReceived += OnClientReceivedMessage;
+		_client.OnLog += OnClientLog;
 	}
 
 		// Start is called before the first frame update
@@ -187,11 +191,11 @@ public class DemoMain : MonoBehaviour
 	}
 
 
-	private void OnDisable()
-	{
-		aTimer.Dispose();
-		print(aTimer == null);
-	}
+	//private void OnDisable()
+	//{
+	//	aTimer.Dispose();
+	//	print(aTimer == null);
+	//}
 
 	public void ConnectButton()
 	{
@@ -202,7 +206,7 @@ public class DemoMain : MonoBehaviour
 			RemoveItemAll(listViewVertical);
 		}
 
-		ConnectToTcpServer();
+		ConnectClient();
 	}
 
 	void ToggleValueChanged(Toggle change)
@@ -212,37 +216,39 @@ public class DemoMain : MonoBehaviour
 		Debug.Log("Toggle is : " + change.isOn);
 		if(change.isOn == true)
 		{
-			if (socketConnection == null)
+			if (!_client.IsConnected)
 			{
 				Debug.Log("ConnectButton();");
 				ConnectButton();
 			}
 		}
 		else
-		{
-			if (socketConnection != null)
-			{
-				Debug.Log("socketConnection.Close();");
-				socketConnection.Close();
-				clientReceiveThread.Abort();
-				string clientMessage = "Socket Connection is diasble!!!";
-				AddItem(listViewVertical, itemVPrefab, clientMessage);
-			}
-			//DisConnectButton();
-		}
+        {
+            string clientMessage = "Socket Connection is diasble!!!";
+            AddItem(listViewVertical, itemVPrefab, clientMessage);
+            //_client.SendMessage("!disconnect");
+            //running = false;
+
+            DisconnectClient();
+
+            //if (socketConnection != null)
+            //{
+            //	Debug.Log("socketConnection.Close();");
+            //	socketConnection.Close();
+            //	clientReceiveThread.Abort();
+            //	string clientMessage = "Socket Connection is diasble!!!";
+            //	AddItem(listViewVertical, itemVPrefab, clientMessage);
+            //}
+            //DisConnectButton();
+        }
 
 	}
 
-	//public void SendMessageButton()
-	//{
-	//	//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-	//	SendMessage();
-	//}
 
 	public void SendButton(int index)
 	{
 		Debug.Log("SendButton= " + index);
-		if (socketConnection == null)
+		if (!_client.IsConnected)
 		{
 			string clientMessage = "SocketConnection is diasble!!!";
 			AddItem(listViewVertical, itemVPrefab, clientMessage);
@@ -250,20 +256,30 @@ public class DemoMain : MonoBehaviour
 		}
 		try
 		{
-			// Get a stream object for writing.
-			NetworkStream stream = socketConnection.GetStream();
-			if (stream.CanWrite)
-			{
-				//string clientMessage = "This is a message from one of your clients.";
-				string clientMessage = tbx_Txt[index].text;
-				// Convert string message to byte array.
-				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
-				// Write byte array to socketConnection stream.
-				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
-				Debug.Log("Client sent his message - should be received by server: " + clientMessage);
-				//AddItem(listViewVertical, itemVPrefab, clientMessage);
-				OnLog(clientMessage);
-			}
+			string clientMessage = tbx_Txt[index].text;
+
+            if (!string.IsNullOrEmpty(clientMessage))
+            {
+                if (_client.SendMessage(clientMessage))
+                {
+                    //MessageInputField.text = string.Empty;
+                }
+            }
+            
+            //// Get a stream object for writing.
+            //NetworkStream stream = socketConnection.GetStream();
+            //if (stream.CanWrite)
+            //{
+            //	//string clientMessage = "This is a message from one of your clients.";
+            //	string clientMessage = tbx_Txt[index].text;
+            //	// Convert string message to byte array.
+            //	byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
+            //	// Write byte array to socketConnection stream.
+            //	stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+            //	Debug.Log("Client sent his message - should be received by server: " + clientMessage);
+            //	//AddItem(listViewVertical, itemVPrefab, clientMessage);
+            //	OnLog(clientMessage);
+			// }
 		}
 		catch (SocketException socketException)
 		{
@@ -274,6 +290,92 @@ public class DemoMain : MonoBehaviour
 
 
 	}
+
+	//***************************************************************************************
+
+	public void ConnectClient()
+	{
+		if (!_client.IsConnected)
+		{
+			_client.IPAddress = tbx_IpAddr.text;
+			int.TryParse(tbx_Port.text, out _client.Port);
+			_client.ConnectToTcpServer();
+		}
+	}
+
+	public void DisconnectClient()
+	{
+		if (_client.IsConnected)
+		{
+			_client.CloseConnection();
+		}
+	}
+
+	////public void SendMessageToServer()
+	////{
+	////	if (_client.IsConnected)
+	////	{
+	////		string message = MessageInputField.text;
+	////		if (message.StartsWith("!ping"))
+	////		{
+	////			message += " " + (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
+	////		}
+
+	////		if (!string.IsNullOrEmpty(message))
+	////		{
+	////			if (_client.SendMessage(message))
+	////			{
+	////				MessageInputField.text = string.Empty;
+	////			}
+	////		}
+	////	}
+	////}
+
+	private void OnClientReceivedMessage(string message)
+	{
+		string finalMessage = message;
+		lock (cacheLock)
+		{
+			if (string.IsNullOrEmpty(cache))
+			{
+				cache = string.Format("<color=green>{0}</color>\n", finalMessage);
+			}
+			else
+			{
+				cache += string.Format("<color=green>{0}</color>\n", finalMessage);
+			}
+		}
+	}
+
+	////private void OnClientLog(string message)
+	////{
+	////	lock (cacheLock)
+	////	{
+	////		if (string.IsNullOrEmpty(cache))
+	////		{
+	////			cache = string.Format("<color=grey>{0}</color>\n", message);
+	////		}
+	////		else
+	////		{
+	////			cache += string.Format("<color=grey>{0}</color>\n", message);
+	////		}
+	////	}
+	////}
+
+	////private void OnServerReceivedMessage(string message)
+	////{
+	////	lock (cacheLock)
+	////	{
+	////		if (string.IsNullOrEmpty(cache))
+	////		{
+	////			cache = string.Format("<color=red>{0}</color>\n", message);
+	////		}
+	////		else
+	////		{
+	////			cache += string.Format("<color=red>{0}</color>\n", message);
+	////		}
+	////	}
+	////}
 
 	private void OnClientLog(string message)
 	{
@@ -345,10 +447,12 @@ public class DemoMain : MonoBehaviour
 
 	}
 
-	/// <summary>
-	/// Setup socket connection.
-	/// </summary>
-	private void ConnectToTcpServer()
+#if false
+
+    /// <summary>
+    /// Setup socket connection.
+    /// </summary>
+    private void ConnectToTcpServer()
 	{
 		try
 		{
@@ -442,6 +546,21 @@ public class DemoMain : MonoBehaviour
 		{
 			Debug.Log("Socket exception: " + socketException);
 		}
+	}
+#endif
+
+
+
+	private void OnClientConnected(TCPTestClient client)
+	{
+		//Debug.Log("OnClientDisconnected: " + client);
+		clients.Add(client);
+	}
+
+	private void OnClientDisconnected(TCPTestClient client)
+	{
+		Debug.Log("OnClientDisconnected: ");
+        clients.Remove(client);
 	}
 
 }
