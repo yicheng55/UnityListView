@@ -48,6 +48,7 @@ public class TCPTestClient : MonoBehaviour
 	/// </summary>     
 	private void ListenForData()
 	{
+		int count =0;
 		try
 		{
 			socketConnection = new TcpClient(IPAddress, Port);
@@ -62,23 +63,33 @@ public class TCPTestClient : MonoBehaviour
 				using (stream = socketConnection.GetStream())
 				{
 					int length;
+					Debug.Log("countBB = " + count);
+					
+					//stream.ReadTimeout = 500;
 					// Read incoming stream into byte array. 					
 					while (running && stream.CanRead)
 					{
-						length = stream.Read(bytes, 0, bytes.Length);
-						if (length != 0)
-						{
-							var incomingData = new byte[length];
-							Array.Copy(bytes, 0, incomingData, 0, length);
-							// Convert byte array to string message. 						
-							string serverJson = Encoding.ASCII.GetString(incomingData);
-							Debug.Log("server message received as: " + serverJson);
-							OnLog(serverJson);
-							//TCPTestServer.ServerMessage serverMessage = JsonUtility.FromJson<TCPTestServer.ServerMessage>(serverJson);
-							string serverMessage = serverJson;
+                        if(stream.DataAvailable)
+                        {
+							Debug.Log("countAA = " + count);
+							length = stream.Read(bytes, 0, bytes.Length);
+							if (length != 0)
+							{
+								var incomingData = new byte[length];
+								Array.Copy(bytes, 0, incomingData, 0, length);
+								// Convert byte array to string message. 						
+								string serverJson = Encoding.ASCII.GetString(incomingData);
+								Debug.Log("server message received as: " + serverJson);
+								OnLog(serverJson);
+								//TCPTestServer.ServerMessage serverMessage = JsonUtility.FromJson<TCPTestServer.ServerMessage>(serverJson);
+								string serverMessage = serverJson;
 
-							MessageReceived(serverMessage);
-                        }
+								MessageReceived(serverMessage);
+							}
+							Debug.Log("count = " + count);
+							count++;
+
+						}
 					}
 				}
 			}
