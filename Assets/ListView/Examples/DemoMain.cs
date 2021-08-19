@@ -163,12 +163,18 @@ public class DemoMain : MonoBehaviour
 
 
 		if(mListMsg.Count > 0)
-        {
-			foreach (string myStringList in mListMsg)
-			{
-				Debug.Log(myStringList);
-				AddItem(listViewVertical, itemVPrefab, myStringList);
-			}
+		{
+
+			for(int i=0; i < mListMsg.Count; i++)
+            {
+                Debug.Log(mListMsg[i]);
+                AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+            }
+			//foreach (string myStringList in mListMsg)  //error
+			//{
+			//	Debug.Log(myStringList);
+			//	AddItem(listViewVertical, itemVPrefab, myStringList);
+			//}
 			mListMsg.Clear();
 		}
 
@@ -200,11 +206,11 @@ public class DemoMain : MonoBehaviour
 	public void ConnectButton()
 	{
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-		Debug.Log("ItemCount: " + listViewVertical.ItemCount);
-		if (listViewVertical.ItemCount > 0)
-        {
-			RemoveItemAll(listViewVertical);
-		}
+		//Debug.Log("ItemCount: " + listViewVertical.ItemCount);
+		//if (listViewVertical.ItemCount > 0)
+  //      {
+		//	RemoveItemAll(listViewVertical);
+		//}
 
 		ConnectClient();
 	}
@@ -224,23 +230,23 @@ public class DemoMain : MonoBehaviour
 		}
 		else
         {
-            string clientMessage = "Socket Connection is diasble!!!";
-            AddItem(listViewVertical, itemVPrefab, clientMessage);
-            //_client.SendMessage("!disconnect");
-            //running = false;
 
-            DisconnectClient();
-
-            //if (socketConnection != null)
-            //{
-            //	Debug.Log("socketConnection.Close();");
-            //	socketConnection.Close();
-            //	clientReceiveThread.Abort();
-            //	string clientMessage = "Socket Connection is diasble!!!";
-            //	AddItem(listViewVertical, itemVPrefab, clientMessage);
-            //}
-            //DisConnectButton();
-        }
+			//_client.SendMessage("!disconnect");
+			//running = false;
+			Debug.Log("DisconnectClient();");
+			DisconnectClient();
+			//string clientMessage = "Socket Connection is diasble!!!";
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			//if (socketConnection != null)
+			//{
+			//	Debug.Log("socketConnection.Close();");
+			//	socketConnection.Close();
+			//	clientReceiveThread.Abort();
+			//	string clientMessage = "Socket Connection is diasble!!!";
+			//	AddItem(listViewVertical, itemVPrefab, clientMessage);
+			//}
+			//DisConnectButton();
+		}
 
 	}
 
@@ -260,7 +266,7 @@ public class DemoMain : MonoBehaviour
 
             if (!string.IsNullOrEmpty(clientMessage))
             {
-                if (_client.SendMessage(clientMessage))
+                if (_client.strSendMessage(clientMessage))
                 {
                     //MessageInputField.text = string.Empty;
                 }
@@ -297,6 +303,7 @@ public class DemoMain : MonoBehaviour
 	{
 		if (!_client.IsConnected)
 		{
+			Debug.Log("ConnectClient()....");
 			_client.IPAddress = tbx_IpAddr.text;
 			int.TryParse(tbx_Port.text, out _client.Port);
 			_client.ConnectToTcpServer();
@@ -307,6 +314,7 @@ public class DemoMain : MonoBehaviour
 	{
 		if (_client.IsConnected)
 		{
+			Debug.Log("DisconnectClient()....");
 			_client.CloseConnection();
 		}
 	}

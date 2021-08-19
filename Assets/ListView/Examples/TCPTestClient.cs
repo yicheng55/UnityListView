@@ -106,7 +106,7 @@ public class TCPTestClient : MonoBehaviour
 
 	public void CloseConnection()
 	{
-		SendMessage("!disconnect");
+		strSendMessage("!disconnect");
 		running = false;
 	}
 
@@ -118,7 +118,7 @@ public class TCPTestClient : MonoBehaviour
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
-	public bool SendMessage(string clientMessage)
+	public bool strSendMessage(string clientMessage)
 	{
 		if (socketConnection != null && socketConnection.Connected)
 		{
