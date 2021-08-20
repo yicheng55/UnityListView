@@ -170,7 +170,7 @@ public class DemoMain : MonoBehaviour
                 Debug.Log(mListMsg[i]);
                 AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
             }
-			//foreach (string myStringList in mListMsg)  //error
+			//foreach (string myStringList in mListMsg)  //error bug.
 			//{
 			//	Debug.Log(myStringList);
 			//	AddItem(listViewVertical, itemVPrefab, myStringList);
