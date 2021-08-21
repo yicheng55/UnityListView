@@ -342,16 +342,20 @@ public class DemoMain : MonoBehaviour
 	private void OnClientReceivedMessage(string message)
 	{
 		string finalMessage = message;
+		Debug.Log("OnClientLog: " + message);
 		lock (cacheLock)
 		{
-			if (string.IsNullOrEmpty(cache))
-			{
-				cache = string.Format("<color=green>{0}</color>\n", finalMessage);
-			}
-			else
-			{
-				cache += string.Format("<color=green>{0}</color>\n", finalMessage);
-			}
+			//if (string.IsNullOrEmpty(cache))
+			//{
+			//	cache = string.Format("<color=green>{0}</color>\n", finalMessage);
+			//}
+			//else
+			//{
+			//	cache += string.Format("<color=green>{0}</color>\n", finalMessage);
+			//}
+
+			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
+			mListMsg.Add(cache);
 		}
 	}
 

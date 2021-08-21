@@ -80,12 +80,12 @@ public class TCPTestClient : MonoBehaviour
 								// Convert byte array to string message. 						
 								string serverJson = Encoding.ASCII.GetString(incomingData);
 								Debug.Log("server message received as: " + serverJson);
-								OnLog(serverJson);
-								//TCPTestServer.ServerMessage serverMessage = JsonUtility.FromJson<TCPTestServer.ServerMessage>(serverJson);
-								string serverMessage = serverJson;
+                                //OnLog(serverJson);
+                                //TCPTestServer.ServerMessage serverMessage = JsonUtility.FromJson<TCPTestServer.ServerMessage>(serverJson);
+                                //string serverMessage = serverJson;
 
-								MessageReceived(serverMessage);
-							}
+                                MessageReceived(serverJson);
+                            }
 							Debug.Log("count = " + count);
 							count++;
 
