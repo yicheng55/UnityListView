@@ -9,6 +9,8 @@ using UnityEngine.UI;
 using System.Text;
 using System.Net;
 using System.Timers;
+using System.Text.RegularExpressions;
+
 
 public class DemoMain : MonoBehaviour
 {
@@ -38,6 +40,9 @@ public class DemoMain : MonoBehaviour
 
     List<string> mListMsg = new List<string>();
 
+	List<string> item1 = new List<string>();
+
+	List<List<string>> ListView_Test = new List<List<string>>();
 
 	private object cacheLock = new object();
 	private string cache;
@@ -339,11 +344,78 @@ public class DemoMain : MonoBehaviour
 	////	}
 	////}
 
-	private void OnClientReceivedMessage(string message)
+	private void OnClientReceivedMessage_old(string message)
 	{
 		string finalMessage = message;
 		Debug.Log("OnClientLog: " + message);
 		lock (cacheLock)
+		{
+			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
+			mListMsg.Add(cache);
+		}
+	}
+
+
+	private void OnClientReceivedMessage(string message)
+	{
+		string finalMessage = message;
+		Debug.Log("OnClientLog: " + message);
+
+		//CSV 解碼
+		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+		var matches = regex.Matches(finalMessage);
+		int csv_total_fields = matches.Count;
+		string[] ack_data = new string[24];
+		int idx = 0;
+		string tag_id = "";
+
+		if (csv_total_fields < 5)
+		{
+			Console.WriteLine("Receive Test CSV Field < 5");
+			return;
+		}
+		//
+		foreach (Match m in matches)
+		{
+			string s = (string)m.Value;
+			ack_data[idx] = s.ToString().Replace('"', ' ').Trim();
+			idx++;
+		}
+		for (; idx < 24; idx++)
+		{
+			ack_data[idx] = "";
+		}
+		tag_id = ack_data[2];
+
+		Debug.Log("tag_id = " + tag_id);
+
+		//item1 = ListView_Test.Find(tag_id);
+
+		List<string> test = new List<string>();
+		test.Add(tag_id);
+		test.Add(finalMessage);
+		ListView_Test.Add(test);
+
+        //List<string> device_item = new List<string>();    //Tag ID
+
+        //item1.Add(tag_id);
+        //item1.Sort();
+        //Debug.Log("item1.Count = " + item1.Count);
+        //for (int i = 0; i < item1.Count; i++)
+        //      {
+        //	Debug.Log(item1[i]);
+        //}
+
+
+        ListView_Test.Sort();
+        Debug.Log("ListView_Test.Count = " + ListView_Test.Count);
+        for (int i = 0; i < ListView_Test.Count; i++)
+        {
+            Debug.Log(ListView_Test[i][0]);
+
+        }
+
+        lock (cacheLock)
 		{
 			//if (string.IsNullOrEmpty(cache))
 			//{
@@ -442,6 +514,13 @@ public class DemoMain : MonoBehaviour
 
 		lv.AddItem(item.gameObject);
         Debug.Log("lv.ItemCount= " + lv.ItemCount);
+
+		//prefab.gameObject.GetComponent<Button>().onClick.AddListener(listViewOnClickTest);
+    }
+
+	public void listViewOnClick(Text msg)
+    {
+		Debug.Log("listViewOnClick: " + msg.text);
     }
 
     private void RemoveItem(ListView lv)

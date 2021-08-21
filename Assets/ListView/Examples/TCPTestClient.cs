@@ -86,7 +86,7 @@ public class TCPTestClient : MonoBehaviour
 
                                 MessageReceived(serverJson);
                             }
-							Debug.Log("count = " + count);
+							Debug.Log("MessageReceived count = " + count);
 							count++;
 
 						}
