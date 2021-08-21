@@ -36,11 +36,38 @@ public class DemoMain : MonoBehaviour
 
 	public Toggle m_ToggleConnect;
 
-    List<string> mListMsg = new List<string>();
+	public GameObject printPanel;
+	public GameObject rowListGameObject;
 
+	struct TAG_ACTIVE_REPORT_STATUS
+	{
+		public string TagID;
+		public int Rssi;
+		public int Battery;
+		public int Temperature;
+		public int Counts;
+		public string Time;
+	}
+
+	private List<tempStructure> tempStructureList = new List<tempStructure>();
+
+	private struct tempStructure
+	{
+		public int tempNumber;
+		public string tempName;
+	}
+
+
+	List<string> mListMsg = new List<string>();
+
+	//List<mListMsg> mListArray = new List<mListMsg>();
+
+	List<List<string>> newString = new List<List<string>>();
 
 	private object cacheLock = new object();
 	private string cache;
+
+	int tempIndex;
 
 	private void Awake()
 	{
@@ -121,6 +148,69 @@ public class DemoMain : MonoBehaviour
 
 		file.Close();
 		Debug.Log("There were lines=" + counter);
+
+
+		//List<TAG_ACTIVE_REPORT_STATUS> test = new List<TAG_ACTIVE_REPORT_STATUS>();
+		//test->Add("95:30:00:00:65",23,12,23.5,1,"hhadjdj");
+		//test.Add(68);
+		//test.Add(68);
+
+		for (int i = 0; i < 5; i++)
+		{
+			List<string> test = new List<string>();
+			test.Add(i.ToString());
+			test.Add("TagID"+i);
+			test.Add("Rssi");
+			test.Add("Battery");
+			test.Add("Temperature");
+			test.Add("Counts");
+			test.Add("Time");
+			newString.Add(test);
+		}
+
+		Debug.Log("newString count = " + newString.Count);
+        Debug.Log(newString[0].ToString());
+        for (int i = 0; i < newString.Count; i++)
+        {
+            Debug.Log(newString[i][1]);
+            //AddItem(listViewVertical, itemVPrefab, newString[i]);
+        }
+        //Debug.Log(newString);
+
+
+        foreach (List<string> myStringList in newString)  //error bug.
+        {
+            Debug.Log(myStringList);
+            //AddItem(listViewVertical, itemVPrefab, myStringList);
+        }
+
+		for(int i = 0; i < newString.Count; i++)
+        {
+			GameObject tempRowList = Instantiate(rowListGameObject);
+			tempRowList.transform.parent = printPanel.transform;
+			tempRowList.GetComponent<RowList>().value1 = newString[i][0];
+			tempRowList.GetComponent<RowList>().value2 = newString[i][1];
+			tempRowList.GetComponent<RowList>().value3 = newString[i][2];
+			tempRowList.GetComponent<RowList>().UpdateUI();
+		}
+
+		////tempStructure xxx = new tempStructure();
+		////tempStructure yyy = new tempStructure();
+
+		////xxx.tempNumber = 1;
+		////xxx.tempName = "XXX";
+		////yyy.tempNumber = 2;
+		////yyy.tempName = "YYY";
+
+		////tempStructureList.Add(xxx);
+		////tempStructureList.Add(yyy);
+
+		////tempIndex = tempStructureList.FindIndex(z => z.tempName == "YYY");
+
+		////      //Debug.log("AAAA= " + tempStructureList[tempIndex].tempNumber);
+		////      Debug.Log("T..." + tempIndex);
+
+
 	}
 
 	private void Update()
