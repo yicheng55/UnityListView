@@ -169,8 +169,8 @@ public class DemoMain : MonoBehaviour
 
 		if(mListMsg.Count > 0)
 		{
-			//RemoveItemAll(listViewVertical);
-			for (int i=0; i < mListMsg.Count; i++)
+            RemoveItemAll(listViewVertical);
+            for (int i=0; i < mListMsg.Count; i++)
             {
                 Debug.Log(mListMsg[i]);
                 AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
@@ -425,29 +425,18 @@ public class DemoMain : MonoBehaviour
         {
 			Debug.Log("Contains what justAString is NULL: " + tag_id);
 			item1.Add(tag_id);
-			cache = string.Format("<color=red>{0}</color>\n", tag_id);
-			mListMsg.Add(cache);
+			item1.Sort();
+			for (int i = 0; i < item1.Count; i++)
+			{
+				Debug.Log(item1[i]);
+				cache = string.Format("<color=red>{0}</color>\n", item1[i]);
+				mListMsg.Add(cache);
+			}
+
+			//cache = string.Format("<color=red>{0}</color>\n", tag_id);
+			//mListMsg.Add(cache);
 		}
 
-
-		//for (int i = 0; i < item1.Count; i++)
-  //      {
-  //          Debug.Log(item1[i]);
-		//	if(String.Compare(item1[i], tag_id) == 0)
-  //          {
-		//		Debug.Log(item1[i] + " = " + tag_id );
-		//		flag = 1;
-		//		break;
-  //          }
-
-		//}
-  //      //lock (cacheLock)
-		//if(flag == 0)
-  //      {
-		//	item1.Add(tag_id);
-		//	cache = string.Format("<color=red>{0}</color>\n", tag_id);
-		//	mListMsg.Add(cache);
-		//}
 
 
 		//ListView_Test.Sort();
