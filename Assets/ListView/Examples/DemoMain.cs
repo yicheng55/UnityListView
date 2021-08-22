@@ -417,32 +417,37 @@ public class DemoMain : MonoBehaviour
         //item1.Sort();
         Debug.Log("item1.Count = " + item1.Count);
 
-   //     if (item1.Count ==0)
-   //     {
-			//item1.Add(tag_id);
-			//cache = string.Format("<color=red>{0}</color>\n", tag_id);
-			//mListMsg.Add(cache);
-			//return;
-		//}
-
-		for (int i = 0; i < item1.Count; i++)
+		if (item1.Contains(tag_id))
         {
-            Debug.Log(item1[i]);
-			if(String.Compare(item1[i], tag_id) == 0)
-            {
-				Debug.Log(item1[i] + " = " + tag_id );
-				flag = 1;
-				break;
-            }
-
+			Debug.Log("Contains what justAString is set to: " + tag_id);
 		}
-        //lock (cacheLock)
-		if(flag == 0)
+		else
         {
+			Debug.Log("Contains what justAString is NULL: " + tag_id);
 			item1.Add(tag_id);
 			cache = string.Format("<color=red>{0}</color>\n", tag_id);
 			mListMsg.Add(cache);
 		}
+
+
+		//for (int i = 0; i < item1.Count; i++)
+  //      {
+  //          Debug.Log(item1[i]);
+		//	if(String.Compare(item1[i], tag_id) == 0)
+  //          {
+		//		Debug.Log(item1[i] + " = " + tag_id );
+		//		flag = 1;
+		//		break;
+  //          }
+
+		//}
+  //      //lock (cacheLock)
+		//if(flag == 0)
+  //      {
+		//	item1.Add(tag_id);
+		//	cache = string.Format("<color=red>{0}</color>\n", tag_id);
+		//	mListMsg.Add(cache);
+		//}
 
 
 		//ListView_Test.Sort();
