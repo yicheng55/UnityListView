@@ -42,7 +42,24 @@ public class DemoMain : MonoBehaviour
 
 	List<string> item1 = new List<string>();
 
-	List<List<string>> ListView_Test = new List<List<string>>();
+    //List<List<string>> ListView_Test = new List<List<string>>();
+    //public List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
+    private List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
+    int tempIndex;
+
+	private struct TAG_ACTIVE_REPORT_STATUS
+	{
+		public string TagID;
+		public string Rssi;
+		public string Battery;
+		public string Temperature;
+		public string Counts;
+		//public int Rssi;
+		//public int Battery;
+		//public int Temperature;
+		//public int Counts;
+		public string Time;
+	}
 
 	private object cacheLock = new object();
 	private string cache;
@@ -402,66 +419,95 @@ public class DemoMain : MonoBehaviour
 
         //List<string> device_item = new List<string>();    //Tag ID
 
-        //item1 = item1.Find(tag_id);
-        //if (item1 == null)
-        //{
-        //	Debug.Log("item1 == null");
-        //	item1.Add(tag_id);
-        //}
-        //else
-        //      {
-        //	Debug.Log("item1 == null");
-        //	return;
-        //      }
 
         //item1.Sort();
         Debug.Log("item1.Count = " + item1.Count);
 
-		if (item1.Contains(tag_id))
+		//////if (item1.Contains(tag_id))
+  //////      {
+		//////	Debug.Log("Contains what justAString is set to: " + tag_id);
+		//////}
+		//////else
+  //////      {
+		//////	Debug.Log("Contains what justAString is NULL: " + tag_id);
+		//////	item1.Add(tag_id);
+		//////	item1.Sort();
+		//////	for (int i = 0; i < item1.Count; i++)
+		//////	{
+		//////		Debug.Log(item1[i]);
+		//////		cache = string.Format("<color=red>{0}</color>\n", item1[i]);
+		//////		mListMsg.Add(cache);
+		//////	}
+
+		//////	//cache = string.Format("<color=red>{0}</color>\n", tag_id);
+		//////	//mListMsg.Add(cache);
+		//////}
+
+		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
+		Debug.Log("tempIndex... : " + tempIndex);
+
+		if( tempIndex == -1)
         {
-			Debug.Log("Contains what justAString is set to: " + tag_id);
+			TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+			tagActiveReportStatus.TagID = tag_id;
+			tagActiveReportStatus.Rssi = ack_data[3];
+			tagActiveReportStatus.Battery = ack_data[4];
+			tagActiveReportStatus.Temperature = ack_data[5];
+			tagActiveReportStatus.Counts = "1";
+			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
+			tagActiveReportStatusList.Add(tagActiveReportStatus);
+
+			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
+			mListMsg.Add(cache);
 		}
-		else
+        else
         {
-			Debug.Log("Contains what justAString is NULL: " + tag_id);
-			item1.Add(tag_id);
-			item1.Sort();
-			for (int i = 0; i < item1.Count; i++)
+			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
+
+			//tagActiveReportStatusList[tempIndex].Counts = "2";
+			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
+			TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+
+			tagActiveReportStatus.TagID = tag_id;
+			tagActiveReportStatus.Rssi = ack_data[3];
+			tagActiveReportStatus.Battery = ack_data[4];
+			tagActiveReportStatus.Temperature = ack_data[5];
+			tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts)+1).ToString();
+			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
+
+
+			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
+
+            //tagActiveReportStatusList.Sort();
+            for (int i = 0; i < tagActiveReportStatusList.Count; i++)
 			{
-				Debug.Log(item1[i]);
-				cache = string.Format("<color=red>{0}</color>\n", item1[i]);
+				Debug.Log(tagActiveReportStatusList[i].TagID);
+				cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
 				mListMsg.Add(cache);
 			}
 
-			//cache = string.Format("<color=red>{0}</color>\n", tag_id);
-			//mListMsg.Add(cache);
+			Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
+			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
+
+
 		}
 
 
-
-		//ListView_Test.Sort();
-		//Debug.Log("ListView_Test.Count = " + ListView_Test.Count);
-		//for (int i = 0; i < ListView_Test.Count; i++)
-		//{
-		//    Debug.Log(ListView_Test[i][0]);
-
-		//}
-
-		//      lock (cacheLock)
-		//{
-		//	//if (string.IsNullOrEmpty(cache))
-		//	//{
-		//	//	cache = string.Format("<color=green>{0}</color>\n", finalMessage);
-		//	//}
-		//	//else
-		//	//{
-		//	//	cache += string.Format("<color=green>{0}</color>\n", finalMessage);
-		//	//}
-
-		//	cache = string.Format("<color=red>{0}</color>\n", tag_id);
-		//	mListMsg.Add(cache);
-		//}
 	}
+
+	/// 将Unix时间戳转换为DateTime类型时间
+	/// </summary>
+	/// <param name="d">double 型数字</param>
+	/// <returns>DateTime</returns>
+	public static System.DateTime ConvertIntDateTime(double d)
+	{
+		System.DateTime time = System.DateTime.MinValue;
+		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0));
+		Debug.Log(startTime);
+		time = startTime.AddSeconds(d);
+		return time;
+	}
+
 
 	////private void OnClientLog(string message)
 	////{
