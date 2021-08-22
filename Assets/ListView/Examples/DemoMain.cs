@@ -169,12 +169,13 @@ public class DemoMain : MonoBehaviour
 
 		if(mListMsg.Count > 0)
 		{
-
-			for(int i=0; i < mListMsg.Count; i++)
+			//RemoveItemAll(listViewVertical);
+			for (int i=0; i < mListMsg.Count; i++)
             {
                 Debug.Log(mListMsg[i]);
                 AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
-            }
+
+			}
 			//foreach (string myStringList in mListMsg)  //error bug.
 			//{
 			//	Debug.Log(myStringList);
@@ -183,6 +184,7 @@ public class DemoMain : MonoBehaviour
 			mListMsg.Clear();
 		}
 
+		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
 		//lock (cacheLock)
 		//{
 		//	if (!string.IsNullOrEmpty(cache))
@@ -360,6 +362,8 @@ public class DemoMain : MonoBehaviour
 	{
 		string finalMessage = message;
 		Debug.Log("OnClientLog: " + message);
+		int flag = 0;
+
 
 		//CSV 解碼
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
@@ -389,46 +393,80 @@ public class DemoMain : MonoBehaviour
 
 		Debug.Log("tag_id = " + tag_id);
 
-		//item1 = ListView_Test.Find(tag_id);
+        //item1 = ListView_Test.Find(tag_id);
 
-		List<string> test = new List<string>();
-		test.Add(tag_id);
-		test.Add(finalMessage);
-		ListView_Test.Add(test);
+        //List<string> test = new List<string>();
+        //test.Add(tag_id);
+        //test.Add(finalMessage);
+        //ListView_Test.Add(test);
 
         //List<string> device_item = new List<string>();    //Tag ID
 
-        //item1.Add(tag_id);
-        //item1.Sort();
-        //Debug.Log("item1.Count = " + item1.Count);
-        //for (int i = 0; i < item1.Count; i++)
-        //      {
-        //	Debug.Log(item1[i]);
+        //item1 = item1.Find(tag_id);
+        //if (item1 == null)
+        //{
+        //	Debug.Log("item1 == null");
+        //	item1.Add(tag_id);
         //}
+        //else
+        //      {
+        //	Debug.Log("item1 == null");
+        //	return;
+        //      }
 
+        //item1.Sort();
+        Debug.Log("item1.Count = " + item1.Count);
 
-        ListView_Test.Sort();
-        Debug.Log("ListView_Test.Count = " + ListView_Test.Count);
-        for (int i = 0; i < ListView_Test.Count; i++)
+   //     if (item1.Count ==0)
+   //     {
+			//item1.Add(tag_id);
+			//cache = string.Format("<color=red>{0}</color>\n", tag_id);
+			//mListMsg.Add(cache);
+			//return;
+		//}
+
+		for (int i = 0; i < item1.Count; i++)
         {
-            Debug.Log(ListView_Test[i][0]);
+            Debug.Log(item1[i]);
+			if(String.Compare(item1[i], tag_id) == 0)
+            {
+				Debug.Log(item1[i] + " = " + tag_id );
+				flag = 1;
+				break;
+            }
 
-        }
-
-        lock (cacheLock)
-		{
-			//if (string.IsNullOrEmpty(cache))
-			//{
-			//	cache = string.Format("<color=green>{0}</color>\n", finalMessage);
-			//}
-			//else
-			//{
-			//	cache += string.Format("<color=green>{0}</color>\n", finalMessage);
-			//}
-
-			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
+		}
+        //lock (cacheLock)
+		if(flag == 0)
+        {
+			item1.Add(tag_id);
+			cache = string.Format("<color=red>{0}</color>\n", tag_id);
 			mListMsg.Add(cache);
 		}
+
+
+		//ListView_Test.Sort();
+		//Debug.Log("ListView_Test.Count = " + ListView_Test.Count);
+		//for (int i = 0; i < ListView_Test.Count; i++)
+		//{
+		//    Debug.Log(ListView_Test[i][0]);
+
+		//}
+
+		//      lock (cacheLock)
+		//{
+		//	//if (string.IsNullOrEmpty(cache))
+		//	//{
+		//	//	cache = string.Format("<color=green>{0}</color>\n", finalMessage);
+		//	//}
+		//	//else
+		//	//{
+		//	//	cache += string.Format("<color=green>{0}</color>\n", finalMessage);
+		//	//}
+
+		//	cache = string.Format("<color=red>{0}</color>\n", tag_id);
+		//	mListMsg.Add(cache);
+		//}
 	}
 
 	////private void OnClientLog(string message)
