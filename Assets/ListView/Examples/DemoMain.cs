@@ -155,7 +155,7 @@ public class DemoMain : MonoBehaviour
 		//test.Add(68);
 		//test.Add(68);
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			List<string> test = new List<string>();
 			test.Add(i.ToString());
