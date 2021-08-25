@@ -457,8 +457,16 @@ public class DemoMain : MonoBehaviour
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 			tagActiveReportStatusList.Add(tagActiveReportStatus);
 
-			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
-			mListMsg.Add(cache);
+			//cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
+			//mListMsg.Add(cache);
+
+			for (int i = 0; i < tagActiveReportStatusList.Count; i++)
+			{
+				Debug.Log(tagActiveReportStatusList[i].TagID);
+				cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+				mListMsg.Add(cache);
+			}
+			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
 		}
         else
         {
