@@ -28,6 +28,8 @@ public class DemoMain : MonoBehaviour
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
 
+	public Text txt_Status;
+
 	////#region private members
 	////private TcpClient socketConnection;
 	////private Thread clientReceiveThread;
@@ -148,29 +150,29 @@ public class DemoMain : MonoBehaviour
 
 	private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
-            {
-                RemoveItem(listViewVertical);
-			}
-            else // v: add
-            {
-                //AddItem(listViewVertical, itemVPrefab, serverMessage);
-            }
-        }
+  //      if (Input.GetKeyDown(KeyCode.V))
+  //      {
+  //          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
+  //          {
+  //              RemoveItem(listViewVertical);
+		//	}
+  //          else // v: add
+  //          {
+  //              //AddItem(listViewVertical, itemVPrefab, serverMessage);
+  //          }
+  //      }
 
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			if (Input.GetKey(KeyCode.LeftShift)) // shift + A: remove
-			{
-				RemoveItemAll(listViewVertical);
-			}
-			else // v: add
-			{
-				//AddItem(listViewVertical, itemVPrefab, serverMessage);
-			}
-		}
+		//if (Input.GetKeyDown(KeyCode.A))
+		//{
+		//	if (Input.GetKey(KeyCode.LeftShift)) // shift + A: remove
+		//	{
+		//		RemoveItemAll(listViewVertical);
+		//	}
+		//	else // v: add
+		//	{
+		//		//AddItem(listViewVertical, itemVPrefab, serverMessage);
+		//	}
+		//}
 
 		if(receiveNum > -2)
         {
@@ -216,10 +218,12 @@ public class DemoMain : MonoBehaviour
 		//}
 		if(statusMsg.Count > 0)
         {
-			for(int i = 0; i<statusMsg.Count; i++)
+			txt_Status.text = "";
+			for (int i = 0; i<statusMsg.Count; i++)
             {
-				AddMsg(statusMsg[i]);
-            }
+				//AddMsg(statusMsg[i]);
+				txt_Status.text += statusMsg[i];
+			}
 			statusMsg.Clear();
         }
 
@@ -393,7 +397,7 @@ public class DemoMain : MonoBehaviour
 		{
 			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
 			//////mListMsg.Add(cache);
-			statusMsg.Add(cache);
+			//statusMsg.Add(cache);
 		}
 	}
 
@@ -640,9 +644,9 @@ public class DemoMain : MonoBehaviour
 			//}
 
 			cache = string.Format("<color=black>{0}</color>\n", message);
-			//mListMsg.Add(cache);
-			statusMsg.Add(cache);
-		}
+            //mListMsg.Add(cache);
+            statusMsg.Add(cache);
+        }
 	}
 
 

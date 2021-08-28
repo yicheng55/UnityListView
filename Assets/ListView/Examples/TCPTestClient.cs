@@ -32,7 +32,7 @@ public class TCPTestClient : MonoBehaviour
 	{
 		try
 		{
-			OnLog(string.Format("Connecting to {0}:{1}", IPAddress, Port));
+			//OnLog(string.Format("Connecting to {0}:{1}", IPAddress, Port));
 			clientReceiveThread = new Thread(new ThreadStart(ListenForData));
 			clientReceiveThread.IsBackground = true;
 			clientReceiveThread.Start();
@@ -53,8 +53,9 @@ public class TCPTestClient : MonoBehaviour
 		{
 			socketConnection = new TcpClient(IPAddress, Port);
 			OnConnected(this);
-			OnLog("Connected");
-			
+			//OnLog("Connected");
+			OnLog(string.Format("Connecting to {0}:{1}", IPAddress, Port));
+
 			Byte[] bytes = new Byte[1024];
 			running = true;
 			while (running)
