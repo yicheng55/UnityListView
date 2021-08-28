@@ -64,7 +64,7 @@ public class TCPTestClient : MonoBehaviour
 				using (stream = socketConnection.GetStream())
 				{
 					int length;
-					Debug.Log("countBB = " + count);
+					//Debug.Log("countBB = " + count);
 					
 					//stream.ReadTimeout = 500;
 					// Read incoming stream into byte array. 					
@@ -72,7 +72,7 @@ public class TCPTestClient : MonoBehaviour
 					{
                         if(stream.DataAvailable)
                         {
-							Debug.Log("countAA = " + count);
+							//Debug.Log("countAA = " + count);
 							length = stream.Read(bytes, 0, bytes.Length);
 							if (length != 0)
 							{
@@ -80,14 +80,14 @@ public class TCPTestClient : MonoBehaviour
 								Array.Copy(bytes, 0, incomingData, 0, length);
 								// Convert byte array to string message. 						
 								string serverJson = Encoding.ASCII.GetString(incomingData);
-								Debug.Log("server message received as: " + serverJson);
+								//Debug.Log("server message received as: " + serverJson);
                                 //OnLog(serverJson);
                                 //TCPTestServer.ServerMessage serverMessage = JsonUtility.FromJson<TCPTestServer.ServerMessage>(serverJson);
                                 //string serverMessage = serverJson;
 
                                 MessageReceived(serverJson);
                             }
-							Debug.Log("MessageReceived count = " + count);
+							//Debug.Log("MessageReceived count = " + count);
 							count++;
 
 						}

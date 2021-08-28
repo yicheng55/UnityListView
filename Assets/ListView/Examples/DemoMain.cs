@@ -184,6 +184,11 @@ public class DemoMain : MonoBehaviour
             {
 				AddMsg();
             }
+			if (tagActiveReportStatusList.Count != listViewVertical.ItemCount)
+            {
+				AddMsg();
+			}
+			txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 			receiveNum = -2;
         }
 
@@ -405,7 +410,7 @@ public class DemoMain : MonoBehaviour
 	private void OnClientReceivedMessage(string message)
 	{
 		string finalMessage = message;
-		Debug.Log("OnClientLog: " + message);
+		//Debug.Log("OnClientLog: " + message);
 		int flag = 0;
 
 
@@ -435,7 +440,7 @@ public class DemoMain : MonoBehaviour
 		}
 		tag_id = ack_data[2];
 
-		Debug.Log("tag_id = " + tag_id);
+		//Debug.Log("tag_id = " + tag_id);
 
         //item1 = ListView_Test.Find(tag_id);
 
@@ -448,7 +453,7 @@ public class DemoMain : MonoBehaviour
 
 
         //item1.Sort();
-        Debug.Log("item1.Count = " + item1.Count);
+        //Debug.Log("item1.Count = " + item1.Count);
 
 		//////if (item1.Contains(tag_id))
   //////      {
@@ -471,7 +476,7 @@ public class DemoMain : MonoBehaviour
 		//////}
 
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
-		Debug.Log("tempIndex... : " + tempIndex);
+		//Debug.Log("tempIndex... : " + tempIndex);
 
 		if( tempIndex == -1)
         {
@@ -498,7 +503,7 @@ public class DemoMain : MonoBehaviour
 			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
 			//	mListMsg.Add(cache);
 			//}
-			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
+			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
 		}
         else
         {
@@ -520,7 +525,12 @@ public class DemoMain : MonoBehaviour
 
 			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
 			mListMsg[tempIndex] = cache;
-			receiveNum = tempIndex;
+
+			if(receiveNum == -2)
+            {
+				receiveNum = tempIndex;
+			}
+
 			//UpdateMsg(tempIndex);
 
 			//tagActiveReportStatusList.Sort();
@@ -532,8 +542,8 @@ public class DemoMain : MonoBehaviour
 			//             mListMsg[i] = cache;
 			//         }
 
-			Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
-			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
+			//Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
+			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
 
 
 		}
@@ -591,7 +601,7 @@ public class DemoMain : MonoBehaviour
 	{
 		System.DateTime time = System.DateTime.MinValue;
 		System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0));
-		Debug.Log(startTime);
+		//Debug.Log(startTime);
 		time = startTime.AddSeconds(d);
 		return time;
 	}
