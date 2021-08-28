@@ -39,6 +39,7 @@ public class DemoMain : MonoBehaviour
 	public Toggle m_ToggleConnect;
 
     List<string> mListMsg = new List<string>();
+	List<string> statusMsg = new List<string>();
 
 	List<string> item1 = new List<string>();
 
@@ -73,7 +74,7 @@ public class DemoMain : MonoBehaviour
 		_client.OnMessageReceived += OnClientReceivedMessage;
 		_client.OnLog += OnClientLog;
 	}
-
+	private int receiveNum = -2;
 		// Start is called before the first frame update
 	void Start()
 	{
@@ -171,6 +172,19 @@ public class DemoMain : MonoBehaviour
 			}
 		}
 
+		if(receiveNum > -2)
+        {
+			if(receiveNum >=0 )
+            {
+				UpdateMsg(receiveNum);
+            }
+			else
+            {
+				AddMsg();
+            }
+			receiveNum = -2;
+        }
+
 		//if (Input.GetKeyDown(KeyCode.H))
 		//{
 		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
@@ -184,22 +198,30 @@ public class DemoMain : MonoBehaviour
 		//}
 
 
-		if(mListMsg.Count > 0)
-		{
-            RemoveItemAll(listViewVertical);
-            for (int i=0; i < mListMsg.Count; i++)
-            {
-                Debug.Log(mListMsg[i]);
-                AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+		//if(mListMsg.Count > 0)
+		//{
+  //          //RemoveItemAll(listViewVertical);
+  //          for (int i=0; i < mListMsg.Count; i++)
+  //          {
+  //              Debug.Log(mListMsg[i]);
+  //              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
 
-			}
-			//foreach (string myStringList in mListMsg)  //error bug.
-			//{
-			//	Debug.Log(myStringList);
-			//	AddItem(listViewVertical, itemVPrefab, myStringList);
-			//}
-			mListMsg.Clear();
-		}
+		//	}
+		//	//foreach (string myStringList in mListMsg)  //error bug.
+		//	//{
+		//	//	Debug.Log(myStringList);
+		//	//	AddItem(listViewVertical, itemVPrefab, myStringList);
+		//	//}
+		//	mListMsg.Clear();
+		//}
+		if(statusMsg.Count > 0)
+        {
+			for(int i = 0; i<statusMsg.Count; i++)
+            {
+				AddMsg(statusMsg[i]);
+            }
+			statusMsg.Clear();
+        }
 
 		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
 		//lock (cacheLock)
@@ -370,7 +392,8 @@ public class DemoMain : MonoBehaviour
 		lock (cacheLock)
 		{
 			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
-			mListMsg.Add(cache);
+			//////mListMsg.Add(cache);
+			statusMsg.Add(cache);
 		}
 	}
 
@@ -457,15 +480,20 @@ public class DemoMain : MonoBehaviour
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 			tagActiveReportStatusList.Add(tagActiveReportStatus);
 
+			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
+			mListMsg.Add(cache);
+			//AddMsg();
+			receiveNum = -1;
+
 			//cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
 			//mListMsg.Add(cache);
 
-			for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			{
-				Debug.Log(tagActiveReportStatusList[i].TagID);
-				cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-				mListMsg.Add(cache);
-			}
+			//for (int i = 0; i < tagActiveReportStatusList.Count; i++)
+			//{
+			//	Debug.Log(tagActiveReportStatusList[i].TagID);
+			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+			//	mListMsg.Add(cache);
+			//}
 			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
 		}
         else
@@ -486,13 +514,19 @@ public class DemoMain : MonoBehaviour
 
 			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
 
-            //tagActiveReportStatusList.Sort();
-            for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			{
-				Debug.Log(tagActiveReportStatusList[i].TagID);
-				cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-				mListMsg.Add(cache);
-			}
+			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
+			mListMsg[tempIndex] = cache;
+			receiveNum = tempIndex;
+			//UpdateMsg(tempIndex);
+
+			//tagActiveReportStatusList.Sort();
+			//         for (int i = 0; i < tagActiveReportStatusList.Count; i++)
+			//{
+			//	Debug.Log(tagActiveReportStatusList[i].TagID);
+			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+			//             //mListMsg.Add(cache);
+			//             mListMsg[i] = cache;
+			//         }
 
 			Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
 			Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
@@ -500,7 +534,49 @@ public class DemoMain : MonoBehaviour
 
 		}
 
+		//for (int i = 0; i < mListMsg.Count; i++)
+		//{
+		//	Debug.Log(tagActiveReportStatusList[i].TagID);
+		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+		//	//mListMsg.Add(cache);
+		//	mListMsg[i] = cache;
+		//}
+		//for(int i = mListMsg.Count+1; i < tagActiveReportStatusList.Count; i++)
+  //      {
+		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+		//	mListMsg.Add(cache);
+  //      }
 
+
+	}
+	public void AddMsg()
+    {
+		AddItem(listViewVertical, itemVPrefab, mListMsg[mListMsg.Count-1]);
+	}
+	public void AddMsg(string msg)
+	{
+		AddItem(listViewVertical, itemVPrefab, msg);
+	}
+
+	public void UpdateMsg(int index)
+    {
+		listViewVertical.GetItem(mListMsg.Count - 1 - index).GetComponent<DemoItem>().SetText(mListMsg[index]);
+		//if (mListMsg.Count > 0)
+		//{
+		//	//RemoveItemAll(listViewVertical);
+		//	for (int i = 0; i < mListMsg.Count; i++)
+		//	{
+		//		Debug.Log(mListMsg[i]);
+		//		AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+
+		//	}
+		//	//foreach (string myStringList in mListMsg)  //error bug.
+		//	//{
+		//	//	Debug.Log(myStringList);
+		//	//	AddItem(listViewVertical, itemVPrefab, myStringList);
+		//	//}
+		//	//mListMsg.Clear();
+		//}
 	}
 
 	/// 将Unix时间戳转换为DateTime类型时间
@@ -564,7 +640,8 @@ public class DemoMain : MonoBehaviour
 			//}
 
 			cache = string.Format("<color=black>{0}</color>\n", message);
-			mListMsg.Add(cache);
+			//mListMsg.Add(cache);
+			statusMsg.Add(cache);
 		}
 	}
 

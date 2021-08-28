@@ -28,4 +28,8 @@ public class DemoItem : MonoBehaviour
         _text.text = text;
         _image.color = bgColor;
     }
+    public void SetText(string text)
+    {
+        _text.text = text;
+    }
 }

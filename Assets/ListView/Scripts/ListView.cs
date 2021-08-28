@@ -246,7 +246,10 @@ public class ListView : MonoBehaviour
 
         return true;
     }
+    public void UpdateItem(int index)
+    {
 
+    }
     /// <summary>
     /// 从ListView顶部移除元素。
     /// </summary>
