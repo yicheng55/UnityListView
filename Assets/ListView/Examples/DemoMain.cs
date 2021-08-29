@@ -30,6 +30,8 @@ public class DemoMain : MonoBehaviour
 
 	public Text txt_Status;
 
+	public Text txt_log;
+
 	////#region private members
 	////private TcpClient socketConnection;
 	////private Thread clientReceiveThread;
@@ -150,17 +152,17 @@ public class DemoMain : MonoBehaviour
 
 	private void Update()
     {
-  //      if (Input.GetKeyDown(KeyCode.V))
-  //      {
-  //          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
-  //          {
-  //              RemoveItem(listViewVertical);
+		//      if (Input.GetKeyDown(KeyCode.V))
+		//      {
+		//          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
+		//          {
+		//              RemoveItem(listViewVertical);
 		//	}
-  //          else // v: add
-  //          {
-  //              //AddItem(listViewVertical, itemVPrefab, serverMessage);
-  //          }
-  //      }
+		//          else // v: add
+		//          {
+		//              //AddItem(listViewVertical, itemVPrefab, serverMessage);
+		//          }
+		//      }
 
 		//if (Input.GetKeyDown(KeyCode.A))
 		//{
@@ -174,7 +176,16 @@ public class DemoMain : MonoBehaviour
 		//	}
 		//}
 
-		if(receiveNum > -2)
+		lock (cacheLock)
+		{
+			if (!string.IsNullOrEmpty(cache))
+			{
+				txt_log.text += string.Format("{0}", cache);
+				cache = null;
+			}
+		}
+
+		if (receiveNum > -2)
         {
 			if(receiveNum >=0 )
             {
@@ -248,8 +259,8 @@ public class DemoMain : MonoBehaviour
 
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
-		//print(e.SignalTime);
-		receiveNum = 0;
+        //print(e.SignalTime);
+        receiveNum = 0;
 	}
 
 
@@ -645,6 +656,8 @@ public class DemoMain : MonoBehaviour
 
 	private void OnClientLog(string message)
 	{
+
+#if false
 		lock (cacheLock)
 		{
 			Debug.Log("OnClientLog: " + message);
@@ -663,8 +676,25 @@ public class DemoMain : MonoBehaviour
             //mListMsg.Add(cache);
             statusMsg.Add(cache);
         }
-	}
+#else
 
+		lock (cacheLock)
+		{
+			Debug.Log("OnClientLog: " + message);
+			if (string.IsNullOrEmpty(cache))
+			{
+				cache = string.Format("<color=white>{0}</color>\n", message);
+				//cache = string.Format("<color=red>{0}</color>\n", message);
+			}
+			else
+			{
+				cache += string.Format("<color=white>{0}</color>\n", message);
+				//cache += string.Format("<color=red>{0}</color>\n", message);
+			}
+			//txt_log.text = cache;
+		}
+#endif
+	}
 
 	private void AddItem(ListView lv, DemoItem prefab, string msg)
     {
