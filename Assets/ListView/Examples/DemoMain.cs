@@ -90,7 +90,7 @@ public class DemoMain : MonoBehaviour
         m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
 
 
-		aTimer = new System.Timers.Timer(200);
+		aTimer = new System.Timers.Timer(2000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
 
@@ -180,14 +180,14 @@ public class DemoMain : MonoBehaviour
             {
 				UpdateMsg(receiveNum);
             }
-			else
-            {
-				AddMsg();
-            }
-			if (tagActiveReportStatusList.Count != listViewVertical.ItemCount)
-            {
-				AddMsg();
-			}
+			//////else
+   //////         {
+			//////	AddMsg();
+   //////         }
+			//////if (tagActiveReportStatusList.Count != listViewVertical.ItemCount)
+   //////         {
+			//////	AddMsg();
+			//////}
 			txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 			receiveNum = -2;
         }
@@ -249,6 +249,7 @@ public class DemoMain : MonoBehaviour
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
 		//print(e.SignalTime);
+		receiveNum = 0;
 	}
 
 
@@ -394,18 +395,6 @@ public class DemoMain : MonoBehaviour
 	////	}
 	////}
 
-	private void OnClientReceivedMessage_old(string message)
-	{
-		string finalMessage = message;
-		Debug.Log("OnClientLog: " + message);
-		lock (cacheLock)
-		{
-			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
-			//////mListMsg.Add(cache);
-			//statusMsg.Add(cache);
-		}
-	}
-
 
 	private void OnClientReceivedMessage(string message)
 	{
@@ -489,10 +478,10 @@ public class DemoMain : MonoBehaviour
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 			tagActiveReportStatusList.Add(tagActiveReportStatus);
 
-			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
-			mListMsg.Add(cache);
-			//AddMsg();
-			receiveNum = -1;
+			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
+			//////mListMsg.Add(cache);
+			////////AddMsg();
+			//////receiveNum = -1;
 
 			//cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
 			//mListMsg.Add(cache);
@@ -523,13 +512,13 @@ public class DemoMain : MonoBehaviour
 
 			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
 
-			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
-			mListMsg[tempIndex] = cache;
+			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
+			//////mListMsg[tempIndex] = cache;
 
-			if(receiveNum == -2)
-            {
-				receiveNum = tempIndex;
-			}
+			//////if(receiveNum == -2)
+   //////         {
+			//////	receiveNum = tempIndex;
+			//////}
 
 			//UpdateMsg(tempIndex);
 
@@ -574,7 +563,24 @@ public class DemoMain : MonoBehaviour
 
 	public void UpdateMsg(int index)
     {
-		listViewVertical.GetItem(mListMsg.Count - 1 - index).GetComponent<DemoItem>().SetText(mListMsg[index]);
+		if(tagActiveReportStatusList.Count > listViewVertical.ItemCount)
+        {
+            for (int i = listViewVertical.ItemCount ; i < tagActiveReportStatusList.Count; i++)
+            {
+                cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+				AddItem(listViewVertical, itemVPrefab, cache);
+				//Debug.Log(cache);
+			}
+
+        }
+
+		for (int i = 0; i < listViewVertical.ItemCount; i++)
+		{
+			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+			listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
+		}
+
+		//listViewVertical.GetItem(mListMsg.Count - 1 - index).GetComponent<DemoItem>().SetText(mListMsg[index]);
 		//if (mListMsg.Count > 0)
 		//{
 		//	//RemoveItemAll(listViewVertical);
