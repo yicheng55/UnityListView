@@ -83,11 +83,16 @@ public class DemoMain : MonoBehaviour
 		int counter = 0, index=0;
 		string line;
 
+       // Log some debug information only if this is a debug build
+		if (Debug.isDebugBuild)
+		{
+			Debug.Log("This is a debug build!");
+		}
 
-        //Fetch the Toggle GameObject
-        //m_ToggleConnect = GetComponent<Toggle>();
-        //Add listener for when the state of the Toggle changes, and output the state
-        m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
+		//Fetch the Toggle GameObject
+		//m_ToggleConnect = GetComponent<Toggle>();
+		//Add listener for when the state of the Toggle changes, and output the state
+		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
 
 
 		aTimer = new System.Timers.Timer(2000);
@@ -512,11 +517,14 @@ public class DemoMain : MonoBehaviour
 
 			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
 
+			Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
+
+
 			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
 			//////mListMsg[tempIndex] = cache;
 
 			//////if(receiveNum == -2)
-   //////         {
+			//////         {
 			//////	receiveNum = tempIndex;
 			//////}
 
