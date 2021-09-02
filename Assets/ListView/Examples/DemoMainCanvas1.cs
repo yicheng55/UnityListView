@@ -12,7 +12,7 @@ using System.Timers;
 using System.Text.RegularExpressions;
 
 
-public class DemoMain : MonoBehaviour
+public class DemoMainCanvas1 : MonoBehaviour
 {
 	private List<TCPTestClient> clients = new List<TCPTestClient>();
 	//private TCPTestServer _server;
@@ -136,10 +136,10 @@ public class DemoMain : MonoBehaviour
 					case 11:
 						tbx_Txt[index - 2].text = line;
 						tagActiveReportStatus.TagID = line;
-						tagActiveReportStatusList.Add(tagActiveReportStatus);
-						//AddItem(listViewVertical, itemVPrefab, index.ToString());
-						//AddItem(listViewTagID, itemVPrefab, line);
-						Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
+                        //tagActiveReportStatusList.Add(tagActiveReportStatus);
+                        ////AddItem(listViewVertical, itemVPrefab, index.ToString());
+                        AddItem(listViewTagID, itemVPrefab, line);
+                        Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 

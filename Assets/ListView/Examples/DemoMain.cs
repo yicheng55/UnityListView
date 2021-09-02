@@ -12,7 +12,7 @@ using System.Timers;
 using System.Text.RegularExpressions;
 
 
-public class DemoMainCanvas1 : MonoBehaviour
+public class DemoMain : MonoBehaviour
 {
 	private List<TCPTestClient> clients = new List<TCPTestClient>();
 	//private TCPTestServer _server;
