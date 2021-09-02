@@ -412,7 +412,7 @@ public class DemoMain : MonoBehaviour
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 		var matches = regex.Matches(finalMessage);
 		int csv_total_fields = matches.Count;
-		string[] ack_data = new string[24];
+		string[] ack_data = new string[64];
 		int idx = 0;
 		string tag_id = "";
 
