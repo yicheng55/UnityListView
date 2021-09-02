@@ -184,7 +184,9 @@ public class DemoMain : MonoBehaviour
 			if(receiveNum >=0 )
             {
 				UpdateMsg(receiveNum);
-            }
+				txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
+				receiveNum = -2;
+			}
 			//////else
    //////         {
 			//////	AddMsg();
@@ -193,8 +195,7 @@ public class DemoMain : MonoBehaviour
    //////         {
 			//////	AddMsg();
 			//////}
-			txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
-			receiveNum = -2;
+
         }
 
 		//if (Input.GetKeyDown(KeyCode.H))
