@@ -20,7 +20,8 @@ public class DemoMain : MonoBehaviour
 
 	public ListView listViewVertical;
     public ListView listViewHorizontal;
-    public DemoItem itemVPrefab;
+	public ListView listViewTagID;
+	public DemoItem itemVPrefab;
     public DemoItem itemHPrefab;
 
 	public InputField[] tbx_Txt;
@@ -84,16 +85,16 @@ public class DemoMain : MonoBehaviour
 		string line;
 
        // Log some debug information only if this is a debug build
-		if (Debug.isDebugBuild)
-		{
-			Debug.Log("This is a debug build!");
-		}
+		//if (Debug.isDebugBuild)
+		//{
+		//	Debug.Log("This is a debug build!");
+		//}
 
 		//Fetch the Toggle GameObject
 		//m_ToggleConnect = GetComponent<Toggle>();
 		//Add listener for when the state of the Toggle changes, and output the state
 		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
-
+		TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
 
 		aTimer = new System.Timers.Timer(2000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
@@ -134,6 +135,11 @@ public class DemoMain : MonoBehaviour
 					case 10:
 					case 11:
 						tbx_Txt[index - 2].text = line;
+						tagActiveReportStatus.TagID = line;
+						tagActiveReportStatusList.Add(tagActiveReportStatus);
+						//AddItem(listViewVertical, itemVPrefab, index.ToString());
+						//AddItem(listViewTagID, itemVPrefab, line);
+						Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 
