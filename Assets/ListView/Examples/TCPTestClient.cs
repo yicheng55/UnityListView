@@ -39,7 +39,7 @@ public class TCPTestClient : MonoBehaviour
 		}
 		catch (Exception e)
 		{
-			OnLog("On client connect exception " + e);
+			OnLog("ConnectToTcpServer connect exception " + e);
 		}
 	}
 

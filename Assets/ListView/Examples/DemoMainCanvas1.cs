@@ -30,6 +30,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public InputField tbx_Port;
 
 	public Text txt_Status;
+	public Toggle m_ToggleConnect;
 
 	////#region private members
 	////private TcpClient socketConnection;
@@ -38,8 +39,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private string serverMessage;
 	private bool running;
 	private static System.Timers.Timer aTimer;
+	private char[] txt_Tagid = {'T','E','S','T'};
 
-	public Toggle m_ToggleConnect;
+
 
     List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
@@ -102,7 +104,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		string sPattern = "^#";
 		// Read the file and display it line by line.  
-		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
+		//System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
+		System.IO.StreamReader file = new System.IO.StreamReader(@"TagidList.cfg");
 		while ((line = file.ReadLine()) != null)
 		{
 			if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
@@ -157,6 +160,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		file.Close();
 		Debug.Log("There were lines=" + counter);
+
+		this.OnClientLog("Start...............");
+
+		Debug.Log("statusMsg.Count: " + statusMsg.Count);
 	}
 
 	private void Update()
@@ -236,11 +243,12 @@ public class DemoMainCanvas1 : MonoBehaviour
 		if(statusMsg.Count > 0)
         {
 			txt_Status.text = "";
+			string s = new string(txt_Tagid);
 			for (int i = 0; i<statusMsg.Count; i++)
             {
-				//AddMsg(statusMsg[i]);
-				txt_Status.text += statusMsg[i];
-			}
+                //txt_Status.text += statusMsg[i];
+                txt_Status.text += statusMsg[i] + "TagID =" + s;
+            }
 			statusMsg.Clear();
         }
 
@@ -261,7 +269,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
 		//print(e.SignalTime);
-		receiveNum = 0;
+		//receiveNum = 0;
 	}
 
 
@@ -372,6 +380,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		if (!_client.IsConnected)
 		{
 			Debug.Log("ConnectClient()....");
+			this.OnClientLog("ConnectClient()....");
+
 			_client.IPAddress = tbx_IpAddr.text;
 			int.TryParse(tbx_Port.text, out _client.Port);
 			_client.ConnectToTcpServer();
@@ -382,6 +392,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	{
 		if (_client.IsConnected)
 		{
+			this.OnClientLog("DisconnectClient()....");
 			Debug.Log("DisconnectClient()....");
 			_client.CloseConnection();
 		}
@@ -412,8 +423,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 	{
 		string finalMessage = message;
 		//Debug.Log("OnClientLog: " + message);
-		int flag = 0;
-
 
 		//CSV 解碼
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
@@ -718,8 +727,19 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public void listViewOnClick(Text msg)
     {
-		Debug.Log("listViewOnClick: " + msg.text);
-    }
+		//Debug.Log("listViewOnClick: " + msg.text);
+		//cache = string.Format("<color=black>{0}</color>\n", msg.text);
+		//statusMsg.Add(cache);
+		//this.OnClientLog(msg.text);
+		//txt_Status.text = msg.text;
+		//statusMsg.Add(msg.text);
+		//txt_Tagid = msg.text;
+		//msg.text.CopyTo(0, txt_Tagid, 0, msg.text.Length);
+		txt_Tagid = msg.text.ToCharArray();
+		statusMsg.Add("listViewOnClick : " );
+		this.OnClientLog("listViewOnClick...............");
+		Debug.Log("statusMsg.Count: " + statusMsg.Count);
+	}
 
     private void RemoveItem(ListView lv)
     {
