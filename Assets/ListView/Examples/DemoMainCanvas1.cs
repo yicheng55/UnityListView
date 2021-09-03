@@ -29,7 +29,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
 
-	public GameObject txt_Status;
+	private GameObject mtxt_Status;
 	public Toggle m_ToggleConnect;
 
 	////#region private members
@@ -86,8 +86,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		int counter = 0, index=0;
 		string line;
 
-		
 
+		mtxt_Status = GameObject.Find("txt_Status");
 		// Log some debug information only if this is a debug build
 		//if (Debug.isDebugBuild)
 		//{
@@ -163,7 +163,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		file.Close();
 		Debug.Log("There were lines=" + counter);
 
-		this.OnClientLog("Start...............");
+		//this.OnClientLog("Start...............");
+		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
 
 		Debug.Log("statusMsg.Count: " + statusMsg.Count);
 	}
@@ -731,10 +732,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public void listViewOnClick(Text msg)
     {
 		//Debug.Log("listViewOnClick: " + msg.text);
-		txt_Status = GameObject.Find("txt_Status");
+		//mtxt_Status = GameObject.Find("txt_Status");
 		Debug.Log("msg: " + msg.text);
-		txt_Status.GetComponent<Text>().text = "TextStatus - " + msg.text;
-		Debug.Log("Time:" + Time.time);
+		mtxt_Status.GetComponent<Text>().text = msg.text;
+		//Debug.Log("Time:" + Time.time);
 		//txt_Status.GetComponent<Text>().text = msg.text;
 		//statusMsg.Add("listViewOnClick : " );
 		//this.OnClientLog("listViewOnClick...............");
