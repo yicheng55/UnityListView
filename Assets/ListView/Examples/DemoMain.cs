@@ -405,7 +405,7 @@ public class DemoMain : MonoBehaviour
 	{
 		string finalMessage = message;
 		//Debug.Log("OnClientLog: " + message);
-		int flag = 0;
+		//int flag = 0;
 
 
 		//CSV 解碼

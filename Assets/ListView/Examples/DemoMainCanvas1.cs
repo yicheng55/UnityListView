@@ -29,7 +29,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
 
-	public Text txt_Status;
+	public GameObject txt_Status;
 	public Toggle m_ToggleConnect;
 
 	////#region private members
@@ -86,7 +86,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 		int counter = 0, index=0;
 		string line;
 
-       // Log some debug information only if this is a debug build
+		
+
+		// Log some debug information only if this is a debug build
 		//if (Debug.isDebugBuild)
 		//{
 		//	Debug.Log("This is a debug build!");
@@ -168,17 +170,17 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void Update()
     {
-  //      if (Input.GetKeyDown(KeyCode.V))
-  //      {
-  //          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
-  //          {
-  //              RemoveItem(listViewVertical);
+		//      if (Input.GetKeyDown(KeyCode.V))
+		//      {
+		//          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
+		//          {
+		//              RemoveItem(listViewVertical);
 		//	}
-  //          else // v: add
-  //          {
-  //              //AddItem(listViewVertical, itemVPrefab, serverMessage);
-  //          }
-  //      }
+		//          else // v: add
+		//          {
+		//              //AddItem(listViewVertical, itemVPrefab, serverMessage);
+		//          }
+		//      }
 
 		//if (Input.GetKeyDown(KeyCode.A))
 		//{
@@ -191,13 +193,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//		//AddItem(listViewVertical, itemVPrefab, serverMessage);
 		//	}
 		//}
+		
 
 		if(receiveNum > -2)
         {
 			if(receiveNum >=0 )
             {
 				UpdateMsg(receiveNum);
-				txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
+				//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 				receiveNum = -2;
 			}
 			//////else
@@ -240,17 +243,17 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//	//}
 		//	mListMsg.Clear();
 		//}
-		if(statusMsg.Count > 0)
-        {
-			txt_Status.text = "";
-			string s = new string(txt_Tagid);
-			for (int i = 0; i<statusMsg.Count; i++)
-            {
-                //txt_Status.text += statusMsg[i];
-                txt_Status.text += statusMsg[i] + "TagID =" + s;
-            }
-			statusMsg.Clear();
-        }
+		//if(statusMsg.Count > 0)
+  //      {
+		//	txt_Status.text = "";
+		//	string s = new string(txt_Tagid);
+		//	for (int i = 0; i<statusMsg.Count; i++)
+  //          {
+  //              //txt_Status.text += statusMsg[i];
+  //              txt_Status.text += statusMsg[i] + "TagID =" + s;
+  //          }
+		//	statusMsg.Clear();
+  //      }
 
 		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
 		//lock (cacheLock)
@@ -728,17 +731,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public void listViewOnClick(Text msg)
     {
 		//Debug.Log("listViewOnClick: " + msg.text);
-		//cache = string.Format("<color=black>{0}</color>\n", msg.text);
-		//statusMsg.Add(cache);
-		//this.OnClientLog(msg.text);
-		//txt_Status.text = msg.text;
-		//statusMsg.Add(msg.text);
-		//txt_Tagid = msg.text;
-		//msg.text.CopyTo(0, txt_Tagid, 0, msg.text.Length);
-		txt_Tagid = msg.text.ToCharArray();
-		statusMsg.Add("listViewOnClick : " );
-		this.OnClientLog("listViewOnClick...............");
-		Debug.Log("statusMsg.Count: " + statusMsg.Count);
+		txt_Status = GameObject.Find("txt_Status");
+		Debug.Log("msg: " + msg.text);
+		txt_Status.GetComponent<Text>().text = "TextStatus - " + msg.text;
+		Debug.Log("Time:" + Time.time);
+		//txt_Status.GetComponent<Text>().text = msg.text;
+		//statusMsg.Add("listViewOnClick : " );
+		//this.OnClientLog("listViewOnClick...............");
+		//Debug.Log("statusMsg.Count: " + statusMsg.Count);
 	}
 
     private void RemoveItem(ListView lv)
