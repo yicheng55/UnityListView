@@ -105,10 +105,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 		aTimer.Start();
 
 		string sPattern = "^#";
-		// Read the file and display it line by line.  
-		//System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
-		System.IO.StreamReader file = new System.IO.StreamReader(@"TagidList.cfg");
-		while ((line = file.ReadLine()) != null)
+        // Read the file and display it line by line.  
+        System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
+        //System.IO.StreamReader file = new System.IO.StreamReader(@"TagidList.cfg");
+        while ((line = file.ReadLine()) != null)
 		{
 			if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
 			{
@@ -143,8 +143,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 						tagActiveReportStatus.TagID = line;
                         //tagActiveReportStatusList.Add(tagActiveReportStatus);
                         ////AddItem(listViewVertical, itemVPrefab, index.ToString());
-                        AddItem(listViewTagID, itemVPrefab, line);
-                        Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
+                        //AddItem(listViewTagID, itemVPrefab, line);
+                        //Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 
@@ -161,8 +161,66 @@ public class DemoMainCanvas1 : MonoBehaviour
 		}
 
 		file.Close();
-		Debug.Log("There were lines=" + counter);
+		Debug.Log("tcpclient.cfg were lines=" + counter);
 
+		index = 0;
+		counter = 0;
+		file = new System.IO.StreamReader(@"TagidList.cfg");
+		while ((line = file.ReadLine()) != null)
+		{
+			if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
+			{
+				Debug.Log(" - valid");
+			}
+			else
+			{
+				//Debug.Log(line);
+				//Debug.Log(" - invalid");
+				switch (index)
+				{
+					case 0:
+						//tbx_IpAddr.text = line;
+						//Debug.Log("Case= " + index + "  line: " + line);
+						//break;
+					case 1:
+						//tbx_Port.text = line;
+						//Debug.Log("Case= " + index + "  line: " + line);
+						//break;
+
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+					case 10:
+					case 11:
+						//tbx_Txt[index - 2].text = line;
+						//tagActiveReportStatus.TagID = line;
+						//tagActiveReportStatusList.Add(tagActiveReportStatus);
+						////AddItem(listViewVertical, itemVPrefab, index.ToString());
+						AddItem(listViewTagID, itemVPrefab, line);
+						//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
+						Debug.Log("Case= " + index + "  line: " + line);
+						break;
+
+					default:
+						Debug.Log("Case= " + index + "  line: " + line);
+						break;
+
+
+				}
+				index++;
+			}
+
+			counter++;
+		}
+
+		file.Close();
+
+		Debug.Log("TagidList.cfg were lines=" + counter);
 		//this.OnClientLog("Start...............");
 		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
 
@@ -732,7 +790,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public void listViewOnClick(Text msg)
     {
 		//Debug.Log("listViewOnClick: " + msg.text);
-		//mtxt_Status = GameObject.Find("txt_Status");
+		mtxt_Status = GameObject.Find("txt_Status");
 		Debug.Log("msg: " + msg.text);
 		mtxt_Status.GetComponent<Text>().text = msg.text;
 		//Debug.Log("Time:" + Time.time);
