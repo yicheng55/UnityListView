@@ -330,7 +330,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
         //print(e.SignalTime);
-        receiveNum = 0;
+        //receiveNum = 0;
     }
 
 
