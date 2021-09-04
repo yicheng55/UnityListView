@@ -870,13 +870,20 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public void listViewOnClick(Text msg)
     {
 		//Debug.Log("listViewOnClick: " + msg.text);
-		mtxt_Status = GameObject.Find("txt_Status");
 		Debug.Log("msg: " + msg.text);
-		mtxt_Status.GetComponent<Text>().text = msg.text;
-        serverMessage = msg.text;
-        //this.GetComponent<DemoMainCanvas1>().testMsg = msg.text;
 
-  //      if (serverMessage != null)
+		mtxt_Status = GameObject.Find("txt_Status");
+		mtxt_Status.GetComponent<Text>().text = msg.text;
+
+		//serverMessage = msg.text;
+		//mtxt_Status.GetComponent<Text>().text = serverMessage;
+
+		//cache = string.Format("<color=red>{0}</color>\n", serverMessage);
+		//mtxt_Status.GetComponent<Text>().text = cache;
+
+		//this.GetComponent<DemoMainCanvas1>().testMsg = msg.text;
+
+		//if (serverMessage != null)
 		//{
 		//	Debug.Log("serverMessage111111 = " + serverMessage);
 		//	//serverMessage = null;
@@ -886,7 +893,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//txt_Status.GetComponent<Text>().text = msg.text;
 		//statusMsg.Add("listViewOnClick : " );
 		//this.OnClientLog("listViewOnClick...............");
-		//Debug.Log("statusMsg.Count: " + statusMsg.Count);
+		//Debug.Log("listViewTagID.Count: " + listViewTagID.ItemCount);
+		//Debug.Log("listViewTagID.Count: " + listViewTagID.ItemCount);
 	}
 
     private void RemoveItem(ListView lv)
