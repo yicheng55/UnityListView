@@ -59,7 +59,11 @@ public class DemoMainCanvas1 : MonoBehaviour
     //List<List<string>> ListView_Test = new List<List<string>>();
     //public List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
     private List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
-    int tempIndex;
+
+	private List<TAGID_LIST_STATUS> tagid_status_list = new List<TAGID_LIST_STATUS>();
+	TAGID_LIST_STATUS tagidListStatus = new TAGID_LIST_STATUS();
+
+	int tempIndex;
 
 	private struct TAG_ACTIVE_REPORT_STATUS
 	{
@@ -73,6 +77,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//public int Temperature;
 		//public int Counts;
 		public string Time;
+	}
+
+	private struct TAGID_LIST_STATUS
+	{
+		public string TagID;
 	}
 
 	private object cacheLock = new object();
@@ -104,9 +113,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//m_ToggleConnect = GetComponent<Toggle>();
 		//Add listener for when the state of the Toggle changes, and output the state
 		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
-		TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+        TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
 
-		aTimer = new System.Timers.Timer(2000);
+        aTimer = new System.Timers.Timer(2000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
 
@@ -207,6 +216,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 						//tagActiveReportStatus.TagID = line;
 						//tagActiveReportStatusList.Add(tagActiveReportStatus);
 						////AddItem(listViewVertical, itemVPrefab, index.ToString());
+						///
+						tagidListStatus.TagID = line;
+						tagid_status_list.Add(tagidListStatus);
 						AddItem(listViewTagID, itemVPrefab, line);
 						//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
@@ -227,6 +239,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		file.Close();
 
 		Debug.Log("TagidList.cfg were lines=" + counter);
+		Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
+
 		//this.OnClientLog("Start...............");
 		mtxt_Status = GameObject.Find("txt_Status");
 		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
