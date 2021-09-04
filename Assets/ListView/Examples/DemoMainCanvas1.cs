@@ -41,9 +41,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private static System.Timers.Timer aTimer;
 	private char[] txt_Tagid = {'T','E','S','T'};
 
+	private int lastindex = -1;
 
-
-    List<string> mListMsg = new List<string>();
+	List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
 
 	List<string> item1 = new List<string>();
@@ -86,8 +86,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 		int counter = 0, index=0;
 		string line;
 
-
-		mtxt_Status = GameObject.Find("txt_Status");
 		// Log some debug information only if this is a debug build
 		//if (Debug.isDebugBuild)
 		//{
@@ -222,6 +220,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		Debug.Log("TagidList.cfg were lines=" + counter);
 		//this.OnClientLog("Start...............");
+		mtxt_Status = GameObject.Find("txt_Status");
 		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
 
 		Debug.Log("statusMsg.Count: " + statusMsg.Count);
@@ -330,9 +329,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
-		//print(e.SignalTime);
-		//receiveNum = 0;
-	}
+        //print(e.SignalTime);
+        receiveNum = 0;
+    }
 
 
 	//private void OnDisable()
@@ -430,6 +429,71 @@ public class DemoMainCanvas1 : MonoBehaviour
 			string clientMessage = "Socket Connection is fail !!!";
 			Debug.Log("Socket exception: " + socketException);
 			AddItem(listViewVertical, itemVPrefab, clientMessage);
+		}
+
+
+	}
+
+
+	public void SendButtonGPIO(int index)
+	{
+		String output;
+		string sPattern = "^#";
+
+		Debug.Log("SendButtonGPIO= " + index);
+		if (!_client.IsConnected)
+		{
+			string clientMessage = "SocketConnection is diasble!!!";
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			mtxt_Status = GameObject.Find("txt_Status");
+			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
+			return;
+		}
+		try
+		{
+
+			mtxt_Status = GameObject.Find("txt_Status");
+			
+			string clientMessage = tbx_Txt[index].text;
+
+			if(lastindex == index )
+            {
+				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, "00");
+				lastindex = -1;
+			}
+			else
+            {
+				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
+				lastindex = index;
+			}
+
+			Debug.Log(" --- output : " + output);
+
+			//System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+			//string output = regex.Replace(clientMessage, "Bob");
+			//Debug.Log(" --- output : " + output);
+
+			//if (System.Text.RegularExpressions.Regex.IsMatch(clientMessage, sPattern))
+			//{
+			//	Debug.Log(" - IsMatch");
+			//}
+
+			clientMessage = output;
+			if (!string.IsNullOrEmpty(clientMessage))
+			{
+				if (_client.strSendMessage(clientMessage))
+				{
+					//MessageInputField.text = string.Empty;
+				}
+			}
+		}
+		catch (SocketException socketException)
+		{
+			string clientMessage = "Socket Connection is fail !!!";
+			Debug.Log("Socket exception: " + socketException);
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			mtxt_Status = GameObject.Find("txt_Status");
+			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
 		}
 
 
