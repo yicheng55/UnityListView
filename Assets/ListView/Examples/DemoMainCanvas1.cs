@@ -10,6 +10,7 @@ using System.Text;
 using System.Net;
 using System.Timers;
 using System.Text.RegularExpressions;
+using TMPro;
 
 
 public class DemoMainCanvas1 : MonoBehaviour
@@ -29,15 +30,21 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
 
-	private GameObject mtxt_Status;
+
 	public Toggle m_ToggleConnect;
+
+	public TMP_Text[] btn_Light_txt;
+
+	private GameObject mtxt_Status;
+	public GameObject[] Image_light;
+
 
 	////#region private members
 	////private TcpClient socketConnection;
 	////private Thread clientReceiveThread;
 	////#endregion
 	private string serverMessage;
-	public string testMsg;
+	//public string testMsg;
 	private bool running;
 	private static System.Timers.Timer aTimer;
 	private char[] txt_Tagid = {'T','E','S','T'};
@@ -435,6 +442,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		Debug.Log("SendButtonGPIO= " + index);
 		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
+
+		//Image_red = GameObject.Find("Image_red_Light");
+		//Image_red.GetComponent<Text>().text = "ONN222";
+		//Text btn_Red_Light_text = btn_Red_Light.transform.GetComponent<Text>();
+
 		if (!_client.IsConnected)
 		{
 			string clientMessage = "SocketConnection is diasble!!!";
@@ -453,12 +465,22 @@ public class DemoMainCanvas1 : MonoBehaviour
 			if(lastindex == index )
             {
 				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, "00");
+				Image_light[index].SetActive(true);
+				btn_Light_txt[index].text = "OFF";
 				lastindex = -1;
 			}
 			else
             {
 				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
+				if( lastindex >= 0)
+                {
+					Image_light[lastindex].SetActive(true);
+					btn_Light_txt[lastindex].text = "OFF";
+				}
+				Image_light[index].SetActive(false);
+				btn_Light_txt[index].text = "ON";
 				lastindex = index;
+
 			}
 
 			Debug.Log(" --- output : " + output);
