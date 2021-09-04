@@ -37,6 +37,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	////private Thread clientReceiveThread;
 	////#endregion
 	private string serverMessage;
+	public string testMsg;
 	private bool running;
 	private static System.Timers.Timer aTimer;
 	private char[] txt_Tagid = {'T','E','S','T'};
@@ -252,8 +253,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//	}
 		//}
 		
+		//Debug.Log("testMsg = " + testMsg);
 
-		if(receiveNum > -2)
+		if (receiveNum > -2)
         {
 			if(receiveNum >=0 )
             {
@@ -261,15 +263,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 				//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 				receiveNum = -2;
 			}
-			//////else
-   //////         {
-			//////	AddMsg();
-   //////         }
-			//////if (tagActiveReportStatusList.Count != listViewVertical.ItemCount)
-   //////         {
-			//////	AddMsg();
-			//////}
-
         }
 
 		//if (Input.GetKeyDown(KeyCode.H))
@@ -441,6 +434,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		string sPattern = "^#";
 
 		Debug.Log("SendButtonGPIO= " + index);
+		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
 		if (!_client.IsConnected)
 		{
 			string clientMessage = "SocketConnection is diasble!!!";
@@ -554,7 +548,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 		var matches = regex.Matches(finalMessage);
 		int csv_total_fields = matches.Count;
-		string[] ack_data = new string[64];
+		string[] ack_data = new string[32];
 		int idx = 0;
 		string tag_id = "";
 
@@ -857,6 +851,15 @@ public class DemoMainCanvas1 : MonoBehaviour
 		mtxt_Status = GameObject.Find("txt_Status");
 		Debug.Log("msg: " + msg.text);
 		mtxt_Status.GetComponent<Text>().text = msg.text;
+        serverMessage = msg.text;
+        //this.GetComponent<DemoMainCanvas1>().testMsg = msg.text;
+
+  //      if (serverMessage != null)
+		//{
+		//	Debug.Log("serverMessage111111 = " + serverMessage);
+		//	//serverMessage = null;
+		//}
+
 		//Debug.Log("Time:" + Time.time);
 		//txt_Status.GetComponent<Text>().text = msg.text;
 		//statusMsg.Add("listViewOnClick : " );
