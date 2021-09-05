@@ -285,23 +285,23 @@ public class DemoMainCanvas1 : MonoBehaviour
 			//	//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 			//	receiveNum = -2;
 			//}
-
-
-
-			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-			mtxt_Status = GameObject.Find("txt_Status");
-			log_Status = mtxt_Status.GetComponent<Text>().text;
-			tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
-			Debug.Log("OnTick log_Status = " + log_Status + ",  index = " + tempIndex);
-			if (tempIndex >= 0)
-			{
-
-				UpdateTagIdList(tempIndex);
-				//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-				//receiveNum = -2;
-			}
-            receiveNum = -2;
         }
+
+
+		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+		mtxt_Status = GameObject.Find("txt_Status");
+		log_Status = mtxt_Status.GetComponent<Text>().text;
+		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
+		//Debug.Log("OnTick log_Status = " + log_Status + ",  index = " + tempIndex);
+		if (tempIndex >= 0)
+		{
+
+			UpdateTagIdList(tempIndex);
+			cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
+			mtxt_Status.GetComponent<Text>().text = cache;
+			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+			//receiveNum = -2;
+		}
 
 		//if (Input.GetKeyDown(KeyCode.H))
 		//{
@@ -360,10 +360,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
-		print(e.SignalTime);
-        receiveNum = 0;
+		//print(e.SignalTime);
+        //receiveNum = 0;
 
-        Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+        //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
         //tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status.text);
 
         //if (tempIndex >= 0)
@@ -834,7 +834,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 			}
             else
             {
-				cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);        //black
+				//cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);        //black
+				cache = tagid_status_list[i].TagID;
 				Debug.Log("cache = " + cache);
 			}
 
