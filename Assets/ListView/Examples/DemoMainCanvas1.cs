@@ -37,6 +37,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private GameObject mtxt_Status;
 	public GameObject[] Image_light;
+	private string log_Status;
 
 
 	////#region private members
@@ -47,7 +48,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	//public string testMsg;
 	private bool running;
 	private static System.Timers.Timer aTimer;
-	private char[] txt_Tagid = {'T','E','S','T'};
+	//private char[] txt_Tagid = {'T','E','S','T'};
 
 	private int lastindex = -1;
 
@@ -63,7 +64,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private List<TAGID_LIST_STATUS> tagid_status_list = new List<TAGID_LIST_STATUS>();
 	TAGID_LIST_STATUS tagidListStatus = new TAGID_LIST_STATUS();
 
-	int tempIndex;
+	private int tempIndex = -1;
 
 	private struct TAG_ACTIVE_REPORT_STATUS
 	{
@@ -115,7 +116,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
         TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
 
-        aTimer = new System.Timers.Timer(2000);
+        aTimer = new System.Timers.Timer(6000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
 
@@ -278,12 +279,28 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		if (receiveNum > -2)
         {
-			if(receiveNum >=0 )
-            {
-				UpdateMsg(receiveNum);
-				//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
-				receiveNum = -2;
+			//if(receiveNum >=0 )
+			//         {
+			//	UpdateMsg(receiveNum);
+			//	//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
+			//	receiveNum = -2;
+			//}
+
+
+
+			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+			mtxt_Status = GameObject.Find("txt_Status");
+			log_Status = mtxt_Status.GetComponent<Text>().text;
+			tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
+			Debug.Log("OnTick log_Status = " + log_Status + ",  index = " + tempIndex);
+			if (tempIndex >= 0)
+			{
+
+				UpdateTagIdList(tempIndex);
+				//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+				//receiveNum = -2;
 			}
+            receiveNum = -2;
         }
 
 		//if (Input.GetKeyDown(KeyCode.H))
@@ -301,11 +318,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		//if(mListMsg.Count > 0)
 		//{
-  //          //RemoveItemAll(listViewVertical);
-  //          for (int i=0; i < mListMsg.Count; i++)
-  //          {
-  //              Debug.Log(mListMsg[i]);
-  //              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+		//          //RemoveItemAll(listViewVertical);
+		//          for (int i=0; i < mListMsg.Count; i++)
+		//          {
+		//              Debug.Log(mListMsg[i]);
+		//              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
 
 		//	}
 		//	//foreach (string myStringList in mListMsg)  //error bug.
@@ -316,16 +333,16 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//	mListMsg.Clear();
 		//}
 		//if(statusMsg.Count > 0)
-  //      {
+		//      {
 		//	txt_Status.text = "";
 		//	string s = new string(txt_Tagid);
 		//	for (int i = 0; i<statusMsg.Count; i++)
-  //          {
-  //              //txt_Status.text += statusMsg[i];
-  //              txt_Status.text += statusMsg[i] + "TagID =" + s;
-  //          }
+		//          {
+		//              //txt_Status.text += statusMsg[i];
+		//              txt_Status.text += statusMsg[i] + "TagID =" + s;
+		//          }
 		//	statusMsg.Clear();
-  //      }
+		//      }
 
 		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
 		//lock (cacheLock)
@@ -343,8 +360,20 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
-        //print(e.SignalTime);
-        //receiveNum = 0;
+		print(e.SignalTime);
+        receiveNum = 0;
+
+        Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+        //tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status.text);
+
+        //if (tempIndex >= 0)
+        //{
+        //	Debug.Log("OnTick log_Status = " + log_Status.text + ",  index = " + tempIndex);
+        //	UpdateTagIdList(tempIndex);
+        //	//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+        //	//receiveNum = -2;
+        //}
+
     }
 
 
@@ -778,6 +807,42 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//	//mListMsg.Clear();
 		//}
 	}
+
+
+
+	public void UpdateTagIdList(int index)
+	{
+		if (tagid_status_list.Count > listViewTagID.ItemCount)
+		{
+			for (int i = listViewTagID.ItemCount; i < tagid_status_list.Count; i++)
+			{
+				//cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);      //black
+				//AddItem(listViewTagID, itemVPrefab, cache);
+				//Debug.Log(cache);
+				AddItem(listViewTagID, itemVPrefab, tagid_status_list[i].TagID);
+			}
+
+		}
+
+		for (int i = 0; i < listViewTagID.ItemCount; i++)
+		{
+			if( i == index)
+            {
+				//Debug.Log("<color=red> tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+				cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[i].TagID);    //red
+				Debug.Log("<color=red> cache = " + cache);
+			}
+            else
+            {
+				cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);        //black
+				Debug.Log("cache = " + cache);
+			}
+
+			listViewTagID.GetItem(i).GetComponent<DemoItem>().SetText(cache);
+		}
+
+	}
+
 
 	/// 将Unix时间戳转换为DateTime类型时间
 	/// </summary>
