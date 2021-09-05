@@ -65,6 +65,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	TAGID_LIST_STATUS tagidListStatus = new TAGID_LIST_STATUS();
 
 	private int tempIndex = -1;
+	private int lastIndexTagId = -1;
 
 	private struct TAG_ACTIVE_REPORT_STATUS
 	{
@@ -299,6 +300,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			UpdateTagIdList(tempIndex);
 			cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
 			mtxt_Status.GetComponent<Text>().text = cache;
+			lastIndexTagId = tempIndex;
 			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
 			//receiveNum = -2;
 		}
@@ -507,15 +509,17 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 			if(lastindex == index )
             {
-				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, "00");
+				//output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, "00");
+				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, "00");
 				Image_light[index].SetActive(true);
 				btn_Light_txt[index].text = "OFF";
 				lastindex = -1;
 			}
 			else
             {
-				output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
-				if( lastindex >= 0)
+				//output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
+				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, (index + 1).ToString("X02"));
+				if ( lastindex >= 0)
                 {
 					Image_light[lastindex].SetActive(true);
 					btn_Light_txt[lastindex].text = "OFF";
