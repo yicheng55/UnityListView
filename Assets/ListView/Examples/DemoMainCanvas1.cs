@@ -306,6 +306,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 			UpdateTagIdList(tempIndex);
 			cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
 			mtxt_Status.GetComponent<Text>().text = cache;
+
+			if (lastindex >= 0)
+			{
+				Image_light[lastindex].SetActive(true);
+				btn_Light_txt[lastindex].text = "OFF";
+				lastindex = -1;
+			}
+
 			lastIndexTagId = tempIndex;
 			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
 			//receiveNum = -2;
@@ -624,8 +632,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 			mtxt_Status = GameObject.Find("txt_Status");
 			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
 		}
-
-
 	}
 
 	//***************************************************************************************
