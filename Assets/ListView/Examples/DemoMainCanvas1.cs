@@ -249,8 +249,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		mtxt_Status = GameObject.Find("txt_Status");
 		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
 		Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
-		mDropWakeUpSec.captionText.text = "Select";
-		mDropWakeUpSec.value = 10;
+		//mDropWakeUpSec.captionText.text = "Select";
+		//mDropWakeUpSec.value = 10;
 		Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
 
 		Debug.Log("statusMsg.Count: " + statusMsg.Count);
