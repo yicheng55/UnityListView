@@ -29,7 +29,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
-
+	public Text  UIlog_Status;
+	public Dropdown mDropWakeUpSec;
 
 	public Toggle m_ToggleConnect;
 
@@ -120,6 +121,7 @@ public class DemoMainCanvas1 : MonoBehaviour
         aTimer = new System.Timers.Timer(6000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
+
 
 		string sPattern = "^#";
         // Read the file and display it line by line.  
@@ -246,6 +248,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//this.OnClientLog("Start...............");
 		mtxt_Status = GameObject.Find("txt_Status");
 		mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
+		Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
+		mDropWakeUpSec.captionText.text = "Select";
+		mDropWakeUpSec.value = 10;
+		Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
 
 		Debug.Log("statusMsg.Count: " + statusMsg.Count);
 	}
@@ -433,6 +439,66 @@ public class DemoMainCanvas1 : MonoBehaviour
 	}
 
 
+	public void DropValueChanged(Text  change)
+	{
+		String output;
+		//m_Text.text = "Toggle is : " + m_Toggle.isOn;
+		//Debug.Log("Toggle is : " + change.isOn);
+		Debug.Log("DropValueChanged is : " + change.text);
+
+
+		if (!_client.IsConnected)
+		{
+			string clientMessage = "SocketConnection is diasble!!!";
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			mtxt_Status = GameObject.Find("txt_Status");
+			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
+			return;
+		}
+		try
+		{
+
+			mtxt_Status = GameObject.Find("txt_Status");
+
+			//string clientMessage = tbx_Txt[index].text;
+			string clientMessage = "QSDM,2,{0},2,0,{1},0,0,1,QEDM";
+
+			//output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
+			output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, change.text);
+
+
+			Debug.Log(" --- output : " + output);
+
+			//System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+			//string output = regex.Replace(clientMessage, "Bob");
+			//Debug.Log(" --- output : " + output);
+
+			//if (System.Text.RegularExpressions.Regex.IsMatch(clientMessage, sPattern))
+			//{
+			//	Debug.Log(" - IsMatch");
+			//}
+
+			clientMessage = output;
+			if (!string.IsNullOrEmpty(clientMessage))
+			{
+				if (_client.strSendMessage(clientMessage))
+				{
+					//MessageInputField.text = string.Empty;
+				}
+			}
+		}
+		catch (SocketException socketException)
+		{
+			string clientMessage = "Socket Connection is fail !!!";
+			Debug.Log("Socket exception: " + socketException);
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			mtxt_Status = GameObject.Find("txt_Status");
+			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
+		}
+
+
+	}
+
 	public void SendButton(int index)
 	{
 		Debug.Log("SendButton= " + index);
@@ -483,7 +549,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public void SendButtonGPIO(int index)
 	{
 		String output;
-		string sPattern = "^#";
+		//string sPattern = "^#";
 
 		Debug.Log("SendButtonGPIO= " + index);
 		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
