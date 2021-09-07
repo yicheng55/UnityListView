@@ -580,6 +580,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 			return;
 		}
 
+		AddItem(listViewTagID, itemVPrefab, tagid_status_list[index].TagID);
+
 		//Image_red = GameObject.Find("Image_red_Light");
 		//Image_red.GetComponent<Text>().text = "ONN222";
 		//Text btn_Red_Light_text = btn_Red_Light.transform.GetComponent<Text>();
