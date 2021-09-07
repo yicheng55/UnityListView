@@ -53,6 +53,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	//private char[] txt_Tagid = {'T','E','S','T'};
 
 	private int lastindex = -1;
+	private int buttonlock = -1;
 
 	List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
@@ -198,25 +199,25 @@ public class DemoMainCanvas1 : MonoBehaviour
 				//Debug.Log(" - invalid");
 				switch (index)
 				{
-					case 0:
-						//tbx_IpAddr.text = line;
-						//Debug.Log("Case= " + index + "  line: " + line);
-						//break;
-					case 1:
-						//tbx_Port.text = line;
-						//Debug.Log("Case= " + index + "  line: " + line);
-						//break;
+					//case 0:
+					//	//tbx_IpAddr.text = line;
+					//	//Debug.Log("Case= " + index + "  line: " + line);
+					//	//break;
+					//case 1:
+					//	//tbx_Port.text = line;
+					//	//Debug.Log("Case= " + index + "  line: " + line);
+					//	//break;
 
-					case 2:
-					case 3:
-					case 4:
-					case 5:
-					case 6:
-					case 7:
-					case 8:
-					case 9:
-					case 10:
-					case 11:
+					//case 2:
+					//case 3:
+					//case 4:
+					//case 5:
+					//case 6:
+					//case 7:
+					//case 8:
+					//case 9:
+					//case 10:
+					case int n when (n < 20):
 						//tbx_Txt[index - 2].text = line;
 						//tagActiveReportStatus.TagID = line;
 						//tagActiveReportStatusList.Add(tagActiveReportStatus);
@@ -570,6 +571,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		Debug.Log("SendButtonGPIO= " + index);
 		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
+		if (buttonlock > 0)
+        {
+			return;
+		}
 
 		//Image_red = GameObject.Find("Image_red_Light");
 		//Image_red.GetComponent<Text>().text = "ONN222";
@@ -629,6 +634,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			{
 				if (_client.strSendMessage(clientMessage))
 				{
+					buttonlock = 1;
 					//MessageInputField.text = string.Empty;
 				}
 			}
@@ -719,28 +725,28 @@ public class DemoMainCanvas1 : MonoBehaviour
 			ack_data[idx] = "";
 		}
 		tag_id = ack_data[2];
-
+		buttonlock = -1;
 		//Debug.Log("tag_id = " + tag_id);
 
-        //item1 = ListView_Test.Find(tag_id);
+		//item1 = ListView_Test.Find(tag_id);
 
-        //List<string> test = new List<string>();
-        //test.Add(tag_id);
-        //test.Add(finalMessage);
-        //ListView_Test.Add(test);
+		//List<string> test = new List<string>();
+		//test.Add(tag_id);
+		//test.Add(finalMessage);
+		//ListView_Test.Add(test);
 
-        //List<string> device_item = new List<string>();    //Tag ID
+		//List<string> device_item = new List<string>();    //Tag ID
 
 
-        //item1.Sort();
-        //Debug.Log("item1.Count = " + item1.Count);
+		//item1.Sort();
+		//Debug.Log("item1.Count = " + item1.Count);
 
 		//////if (item1.Contains(tag_id))
-  //////      {
+		//////      {
 		//////	Debug.Log("Contains what justAString is set to: " + tag_id);
 		//////}
 		//////else
-  //////      {
+		//////      {
 		//////	Debug.Log("Contains what justAString is NULL: " + tag_id);
 		//////	item1.Add(tag_id);
 		//////	item1.Sort();
@@ -769,22 +775,22 @@ public class DemoMainCanvas1 : MonoBehaviour
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 			tagActiveReportStatusList.Add(tagActiveReportStatus);
 
-			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
-			//////mListMsg.Add(cache);
-			////////AddMsg();
-			//////receiveNum = -1;
+            //////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
+            //////mListMsg.Add(cache);
+            ////////AddMsg();
+            //////receiveNum = -1;
 
-			//cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
-			//mListMsg.Add(cache);
+            //cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
+            //mListMsg.Add(cache);
 
-			//for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			//{
-			//	Debug.Log(tagActiveReportStatusList[i].TagID);
-			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			//	mListMsg.Add(cache);
-			//}
-			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
-		}
+            //for (int i = 0; i < tagActiveReportStatusList.Count; i++)
+            //{
+            //	Debug.Log(tagActiveReportStatusList[i].TagID);
+            //	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+            //	mListMsg.Add(cache);
+            //}
+            Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
+        }
         else
         {
 			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
