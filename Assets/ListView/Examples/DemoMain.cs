@@ -10,6 +10,7 @@ using System.Text;
 using System.Net;
 using System.Timers;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 
 public class DemoMain : MonoBehaviour
@@ -412,7 +413,7 @@ public class DemoMain : MonoBehaviour
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 		var matches = regex.Matches(finalMessage);
 		int csv_total_fields = matches.Count;
-		string[] ack_data = new string[64];
+		string[] ack_data = new string[32];
 		int idx = 0;
 		string tag_id = "";
 
@@ -434,41 +435,6 @@ public class DemoMain : MonoBehaviour
 		}
 		tag_id = ack_data[2];
 
-		//Debug.Log("tag_id = " + tag_id);
-
-        //item1 = ListView_Test.Find(tag_id);
-
-        //List<string> test = new List<string>();
-        //test.Add(tag_id);
-        //test.Add(finalMessage);
-        //ListView_Test.Add(test);
-
-        //List<string> device_item = new List<string>();    //Tag ID
-
-
-        //item1.Sort();
-        //Debug.Log("item1.Count = " + item1.Count);
-
-		//////if (item1.Contains(tag_id))
-  //////      {
-		//////	Debug.Log("Contains what justAString is set to: " + tag_id);
-		//////}
-		//////else
-  //////      {
-		//////	Debug.Log("Contains what justAString is NULL: " + tag_id);
-		//////	item1.Add(tag_id);
-		//////	item1.Sort();
-		//////	for (int i = 0; i < item1.Count; i++)
-		//////	{
-		//////		Debug.Log(item1[i]);
-		//////		cache = string.Format("<color=red>{0}</color>\n", item1[i]);
-		//////		mListMsg.Add(cache);
-		//////	}
-
-		//////	//cache = string.Format("<color=red>{0}</color>\n", tag_id);
-		//////	//mListMsg.Add(cache);
-		//////}
-
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
 		//Debug.Log("tempIndex... : " + tempIndex);
 
@@ -479,7 +445,7 @@ public class DemoMain : MonoBehaviour
 			tagActiveReportStatus.Rssi = ack_data[3];
 			tagActiveReportStatus.Battery = ack_data[4];
 			tagActiveReportStatus.Temperature = ack_data[5];
-			tagActiveReportStatus.Counts = "1";
+			tagActiveReportStatus.Counts = "000001";
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 			tagActiveReportStatusList.Add(tagActiveReportStatus);
 
@@ -511,7 +477,7 @@ public class DemoMain : MonoBehaviour
 			tagActiveReportStatus.Rssi = ack_data[3];
 			tagActiveReportStatus.Battery = ack_data[4];
 			tagActiveReportStatus.Temperature = ack_data[5];
-			tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts)+1).ToString();
+			tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts)+1).ToString("000000");
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 
 
@@ -520,45 +486,8 @@ public class DemoMain : MonoBehaviour
 			Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
 
 
-			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
-			//////mListMsg[tempIndex] = cache;
-
-			//////if(receiveNum == -2)
-			//////         {
-			//////	receiveNum = tempIndex;
-			//////}
-
-			//UpdateMsg(tempIndex);
-
-			//tagActiveReportStatusList.Sort();
-			//         for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			//{
-			//	Debug.Log(tagActiveReportStatusList[i].TagID);
-			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			//             //mListMsg.Add(cache);
-			//             mListMsg[i] = cache;
-			//         }
-
-			//Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
-			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
-
-
 		}
-
-		//for (int i = 0; i < mListMsg.Count; i++)
-		//{
-		//	Debug.Log(tagActiveReportStatusList[i].TagID);
-		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-		//	//mListMsg.Add(cache);
-		//	mListMsg[i] = cache;
-		//}
-		//for(int i = mListMsg.Count+1; i < tagActiveReportStatusList.Count; i++)
-  //      {
-		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-		//	mListMsg.Add(cache);
-  //      }
-
-
+		tagActiveReportStatusList = tagActiveReportStatusList.OrderBy(sel => sel.TagID).ToList();   //using System.Linq;
 	}
 	public void AddMsg()
     {
@@ -576,7 +505,8 @@ public class DemoMain : MonoBehaviour
             for (int i = listViewVertical.ItemCount ; i < tagActiveReportStatusList.Count; i++)
             {
                 cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-				AddItem(listViewVertical, itemVPrefab, cache);
+                //cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+                AddItem(listViewVertical, itemVPrefab, cache);
 				//Debug.Log(cache);
 			}
 
@@ -584,7 +514,7 @@ public class DemoMain : MonoBehaviour
 
 		for (int i = 0; i < listViewVertical.ItemCount; i++)
 		{
-			cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+			cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n",i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
 			listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
 		}
 
