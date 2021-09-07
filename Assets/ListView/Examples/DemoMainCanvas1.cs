@@ -272,6 +272,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void Update()
     {
+		string log_Status = "";
 		//      if (Input.GetKeyDown(KeyCode.V))
 		//      {
 		//          if (Input.GetKey(KeyCode.LeftShift)) // shift + v: remove
@@ -295,7 +296,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//		//AddItem(listViewVertical, itemVPrefab, serverMessage);
 		//	}
 		//}
-		
+
 		//Debug.Log("testMsg = " + testMsg);
 
 		if (receiveNum > -2)
@@ -312,8 +313,18 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
 		mtxt_Status = GameObject.Find("txt_Status");
 		log_Status = mtxt_Status.GetComponent<Text>().text;
-		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
-		//Debug.Log("OnTick log_Status = " + log_Status + ",  index = " + tempIndex);
+		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);		//??????
+
+		//////char[] separators = new char[] {' ', '|' };
+		//////string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+		////////foreach (var sub in subs)
+		////////{
+		////////	Debug.Log($"Substring: " + sub);
+		////////}
+		//////tag_id = subs[1];
+		//////Debug.Log($"Substring:" + tag_id);
+		//////      tempIndex = tagid_status_list.FindIndex(z => z.TagID == tag_id);
+		//////      Debug.Log("Update log_Status = " + log_Status + ",  index = " + tempIndex);
 		if (tempIndex >= 0)
 		{
 
