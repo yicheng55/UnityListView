@@ -246,14 +246,18 @@ public class DemoMainCanvas1 : MonoBehaviour
 
         tagid_status_list = tagid_status_list.OrderBy(sel => sel.TagID).ToList();       //using System.Linq;
 
-        foreach (TAGID_LIST_STATUS myStringList in tagid_status_list)
-        {
-            //Debug.Log(myStringList.TagID);
-			AddItem(listViewTagID, itemVPrefab, myStringList.TagID);
-		}
-
         Debug.Log("TagidList.cfg were lines=" + counter);
 		Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
+
+
+		counter = 0;
+		foreach (TAGID_LIST_STATUS myStringList in tagid_status_list)
+		{
+			//Debug.Log(myStringList.TagID);
+			cache = counter.ToString("000") + "   |   " + myStringList.TagID;
+			AddItem(listViewTagID, itemVPrefab, cache);
+			counter++;
+		}
 
 		//this.OnClientLog("Start...............");
 		mtxt_Status = GameObject.Find("txt_Status");
@@ -920,13 +924,13 @@ public class DemoMainCanvas1 : MonoBehaviour
 			if( i == index)
             {
 				//Debug.Log("<color=red> tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-				cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[i].TagID);    //red
+				cache = string.Format("<color=red>{0}    |   {1}</color>\n", i.ToString("000"), tagid_status_list[i].TagID);    //red
 				Debug.Log("<color=red> cache = " + cache);
 			}
             else
             {
 				//cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);        //black
-				cache = tagid_status_list[i].TagID;
+				cache = i.ToString("000") + "   |   " + tagid_status_list[i].TagID;
 				Debug.Log("cache = " + cache);
 			}
 
