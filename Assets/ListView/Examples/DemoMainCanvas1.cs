@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System.Text;
 using System.Net;
 using System.Timers;
+using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 
@@ -223,7 +224,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 						///
 						tagidListStatus.TagID = line;
 						tagid_status_list.Add(tagidListStatus);
-						AddItem(listViewTagID, itemVPrefab, line);
+						//AddItem(listViewTagID, itemVPrefab, line);
 						//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
@@ -242,7 +243,15 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		file.Close();
 
-		Debug.Log("TagidList.cfg were lines=" + counter);
+        tagid_status_list = tagid_status_list.OrderBy(sel => sel.TagID).ToList();       //using System.Linq;
+
+        foreach (TAGID_LIST_STATUS myStringList in tagid_status_list)
+        {
+            //Debug.Log(myStringList.TagID);
+			AddItem(listViewTagID, itemVPrefab, myStringList.TagID);
+		}
+
+        Debug.Log("TagidList.cfg were lines=" + counter);
 		Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
 
 		//this.OnClientLog("Start...............");
