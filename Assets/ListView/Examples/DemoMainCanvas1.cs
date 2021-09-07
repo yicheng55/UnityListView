@@ -591,8 +591,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 			return;
 		}
 
-		AddItem(listViewTagID, itemVPrefab, tagid_status_list[index].TagID);
-
 		//Image_red = GameObject.Find("Image_red_Light");
 		//Image_red.GetComponent<Text>().text = "ONN222";
 		//Text btn_Red_Light_text = btn_Red_Light.transform.GetComponent<Text>();
@@ -1057,11 +1055,28 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public void listViewOnClick(Text msg)
     {
+		string tag_id;
 		//Debug.Log("listViewOnClick: " + msg.text);
 		Debug.Log("msg: " + msg.text);
 
-		mtxt_Status = GameObject.Find("txt_Status");
-		mtxt_Status.GetComponent<Text>().text = msg.text;
+
+		log_Status = msg.text;
+
+		char[] separators = new char[] { ' ', '|' };
+        string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+		//foreach (var sub in subs)
+		//{
+		//	Debug.Log($"Substring: " + sub);
+		//}
+
+		//////tag_id = subs[1].Substring(0, 10);
+
+		tag_id = subs[1];
+		Debug.Log($"Substring:" + tag_id);
+        //Debug.Log("Update log_Status = " + log_Status + ",  index = " + tempIndex);
+
+        mtxt_Status = GameObject.Find("txt_Status");
+		mtxt_Status.GetComponent<Text>().text = tag_id;
 
 		//serverMessage = msg.text;
 		//mtxt_Status.GetComponent<Text>().text = serverMessage;
