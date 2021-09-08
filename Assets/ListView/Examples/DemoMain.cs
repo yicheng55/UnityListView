@@ -407,7 +407,7 @@ public class DemoMain : MonoBehaviour
 		string finalMessage = message;
 		//Debug.Log("OnClientLog: " + message);
 		int flag = 0;
-
+		Debug.Log("Len = " + message.Length + "    message = " + message);
 
 		//CSV 解碼
 		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
@@ -419,7 +419,7 @@ public class DemoMain : MonoBehaviour
 
 		if (csv_total_fields < 5)
 		{
-			Console.WriteLine("Receive Test CSV Field < 5");
+			Debug.Log("Receive Test CSV Field < 5");
 			return;
 		}
 		//
@@ -514,8 +514,10 @@ public class DemoMain : MonoBehaviour
 
 		for (int i = 0; i < listViewVertical.ItemCount; i++)
 		{
-			cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n",i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
+			//cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n",i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+			cache = string.Format("<color=red>|  {0}    |   {1}   |   {2}    |   {3}    |   {4}    |   {5}    |   {6}  |</color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Rssi,
+				tagActiveReportStatusList[i].Battery, tagActiveReportStatusList[i].Temperature, tagActiveReportStatusList[i].Counts, tagActiveReportStatusList[i].Time);
+		listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
 		}
 
 		//listViewVertical.GetItem(mListMsg.Count - 1 - index).GetComponent<DemoItem>().SetText(mListMsg[index]);
