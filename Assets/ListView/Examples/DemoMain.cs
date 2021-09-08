@@ -504,7 +504,8 @@ public class DemoMain : MonoBehaviour
         {
             for (int i = listViewVertical.ItemCount ; i < tagActiveReportStatusList.Count; i++)
             {
-                cache = string.Format("<color=red>{0} |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+				cache = string.Format("{0} |  {1}", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+				//cache = string.Format("<color=red>{0} |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
                 //cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
                 AddItem(listViewVertical, itemVPrefab, cache);
 				//Debug.Log(cache);
@@ -515,7 +516,7 @@ public class DemoMain : MonoBehaviour
 		for (int i = 0; i < listViewVertical.ItemCount; i++)
 		{
 			//cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n",i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			cache = string.Format("<color=red>|  {0}   |    {1}    |     {2}       |      {3}        |        {4}           |    {5}    |      {6}     |</color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Rssi,
+			cache = string.Format("|  {0}   |    {1}    |     {2}       |      {3}        |        {4}           |    {5}    |      {6}     |", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Rssi,
 				tagActiveReportStatusList[i].Battery, tagActiveReportStatusList[i].Temperature, tagActiveReportStatusList[i].Counts, tagActiveReportStatusList[i].Time);
 		listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
 		}
@@ -617,11 +618,15 @@ public class DemoMain : MonoBehaviour
 			//g = UnityEngine.Random.Range(0.0f, 0.5f),
 			//b = UnityEngine.Random.Range(0.0f, 0.5f),
 			//a = 1.0f,
-			r = UnityEngine.Random.Range(0.3f, 1.0f),
-            g = UnityEngine.Random.Range(0.3f, 1.0f),
-            b = UnityEngine.Random.Range(0.3f, 1.0f),
-            a = 0.5f,
-        };
+			//r = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         g = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         b = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         a = 0.5f,
+			r = 1.0f,
+			g = 1.0f,
+			b = 1.0f,
+			a = 1.0f,
+		};
 		Debug.Log("AddItem msg: " + msg);
 		var item = Instantiate(prefab);
 
