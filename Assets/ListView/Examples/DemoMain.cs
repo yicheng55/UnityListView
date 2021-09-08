@@ -504,7 +504,7 @@ public class DemoMain : MonoBehaviour
         {
             for (int i = listViewVertical.ItemCount ; i < tagActiveReportStatusList.Count; i++)
             {
-                cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
+                cache = string.Format("<color=red>{0} |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
                 //cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
                 AddItem(listViewVertical, itemVPrefab, cache);
 				//Debug.Log(cache);
@@ -515,7 +515,7 @@ public class DemoMain : MonoBehaviour
 		for (int i = 0; i < listViewVertical.ItemCount; i++)
 		{
 			//cache = string.Format("<color=red>{0}    |   {1}   |   {2} </color>\n",i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			cache = string.Format("<color=red>|  {0}    |   {1}   |   {2}    |   {3}    |   {4}    |   {5}    |   {6}  |</color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Rssi,
+			cache = string.Format("<color=red>|  {0}   |    {1}    |     {2}       |      {3}        |        {4}           |    {5}    |      {6}     |</color>\n", i.ToString("000"), tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Rssi,
 				tagActiveReportStatusList[i].Battery, tagActiveReportStatusList[i].Temperature, tagActiveReportStatusList[i].Counts, tagActiveReportStatusList[i].Time);
 		listViewVertical.GetItem(i).GetComponent<DemoItem>().SetText(cache);
 		}
