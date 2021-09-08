@@ -1029,11 +1029,17 @@ public class DemoMainCanvas1 : MonoBehaviour
 			//g = UnityEngine.Random.Range(0.0f, 0.5f),
 			//b = UnityEngine.Random.Range(0.0f, 0.5f),
 			//a = 1.0f,
-			r = UnityEngine.Random.Range(0.3f, 1.0f),
-            g = UnityEngine.Random.Range(0.3f, 1.0f),
-            b = UnityEngine.Random.Range(0.3f, 1.0f),
-            a = 0.5f,
-        };
+			//r = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         g = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         b = UnityEngine.Random.Range(0.3f, 1.0f),
+			//         a = 0.5f,
+
+			r = 1.0f,
+			g = 1.0f,
+			b = 1.0f,
+			a = 0.5f,
+
+		};
 		Debug.Log("AddItem msg: " + msg);
 		var item = Instantiate(prefab);
 
@@ -1057,21 +1063,25 @@ public class DemoMainCanvas1 : MonoBehaviour
     {
 		string tag_id;
 		//Debug.Log("listViewOnClick: " + msg.text);
-		Debug.Log("msg: " + msg.text);
+		Debug.Log("msg: " + msg.text + ",  buttonlock =" + buttonlock);
 
+		if (buttonlock > 0)
+		{
+			return;
+		}
 
 		log_Status = msg.text;
 
 		char[] separators = new char[] { ' ', '|' };
         string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-		//foreach (var sub in subs)
-		//{
-		//	Debug.Log($"Substring: " + sub);
-		//}
+        //foreach (var sub in subs)
+        //{
+        //	Debug.Log($"Substring: " + sub);
+        //}
 
-		//////tag_id = subs[1].Substring(0, 10);
+        tag_id = subs[1].Substring(0, 10);
 
-		tag_id = subs[1];
+        //tag_id = subs[1];
 		Debug.Log($"Substring:" + tag_id);
         //Debug.Log("Update log_Status = " + log_Status + ",  index = " + tempIndex);
 
