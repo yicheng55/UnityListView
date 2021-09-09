@@ -636,7 +636,7 @@ public class DemoMain : MonoBehaviour
 
 	public void listViewOnClick(Text msg)
     {
-		Debug.Log("listViewOnClick: " + msg.text);
+		//Debug.Log("listViewOnClick: " + msg.text);
     }
 
     private void RemoveItem(ListView lv)
