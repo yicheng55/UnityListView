@@ -404,89 +404,77 @@ public class DemoMain : MonoBehaviour
 
 	private void OnClientReceivedMessage(string message)
 	{
-		string finalMessage = message;
+		string finalMessage;
 		//Debug.Log("OnClientLog: " + message);
 		int flag = 0;
 		Debug.Log("Len = " + message.Length + "    message = " + message);
 
-		//CSV 解碼
-		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
-		var matches = regex.Matches(finalMessage);
-		int csv_total_fields = matches.Count;
-		string[] ack_data = new string[32];
-		int idx = 0;
-		string tag_id = "";
-
-		if (csv_total_fields < 5)
+		using (var reader = new System.IO.StringReader(message))
 		{
-			Debug.Log("Receive Test CSV Field < 5");
-			return;
+			for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+			{
+				// Do something with the line
+				Debug.Log("Len = " + line.Length + "    line = " + line);
+				finalMessage = line;
+
+				//CSV 解碼
+				var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+				var matches = regex.Matches(finalMessage);
+				int csv_total_fields = matches.Count;
+				string[] ack_data = new string[32];
+				int idx = 0;
+				string tag_id = "";
+
+				if (csv_total_fields < 5)
+				{
+					Debug.Log("Receive Test CSV Field < 5");
+					continue;
+					//return;
+				}
+				//
+				foreach (Match m in matches)
+				{
+					string s = (string)m.Value;
+					ack_data[idx] = s.ToString().Replace('"', ' ').Trim();
+					idx++;
+				}
+				for (; idx < 24; idx++)
+				{
+					ack_data[idx] = "";
+				}
+				tag_id = ack_data[2];
+
+				tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
+				//Debug.Log("tempIndex... : " + tempIndex);
+
+				if (tempIndex == -1)
+				{
+					TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+					tagActiveReportStatus.TagID = tag_id;
+					tagActiveReportStatus.Rssi = ack_data[3];
+					tagActiveReportStatus.Battery = ack_data[4];
+					tagActiveReportStatus.Temperature = ack_data[5];
+					tagActiveReportStatus.Counts = "000001";
+					tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
+					tagActiveReportStatusList.Add(tagActiveReportStatus);
+				}
+				else
+				{
+					TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+					tagActiveReportStatus.TagID = tag_id;
+					tagActiveReportStatus.Rssi = ack_data[3];
+					tagActiveReportStatus.Battery = ack_data[4];
+					tagActiveReportStatus.Temperature = ack_data[5];
+					tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts) + 1).ToString("000000");
+					tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
+
+					tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
+
+					Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
+				}
+			}
 		}
-		//
-		foreach (Match m in matches)
-		{
-			string s = (string)m.Value;
-			ack_data[idx] = s.ToString().Replace('"', ' ').Trim();
-			idx++;
-		}
-		for (; idx < 24; idx++)
-		{
-			ack_data[idx] = "";
-		}
-		tag_id = ack_data[2];
 
-		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
-		//Debug.Log("tempIndex... : " + tempIndex);
-
-		if( tempIndex == -1)
-        {
-			TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
-			tagActiveReportStatus.TagID = tag_id;
-			tagActiveReportStatus.Rssi = ack_data[3];
-			tagActiveReportStatus.Battery = ack_data[4];
-			tagActiveReportStatus.Temperature = ack_data[5];
-			tagActiveReportStatus.Counts = "000001";
-			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
-			tagActiveReportStatusList.Add(tagActiveReportStatus);
-
-			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tagActiveReportStatusList.Count-1].TagID, tagActiveReportStatusList[tagActiveReportStatusList.Count - 1].Counts);
-			//////mListMsg.Add(cache);
-			////////AddMsg();
-			//////receiveNum = -1;
-
-			//cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatus.TagID, tagActiveReportStatus.Counts);
-			//mListMsg.Add(cache);
-
-			//for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			//{
-			//	Debug.Log(tagActiveReportStatusList[i].TagID);
-			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			//	mListMsg.Add(cache);
-			//}
-			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
-		}
-        else
-        {
-			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
-
-			//tagActiveReportStatusList[tempIndex].Counts = "2";
-			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
-			TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
-
-			tagActiveReportStatus.TagID = tag_id;
-			tagActiveReportStatus.Rssi = ack_data[3];
-			tagActiveReportStatus.Battery = ack_data[4];
-			tagActiveReportStatus.Temperature = ack_data[5];
-			tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts)+1).ToString("000000");
-			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
-
-
-			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
-
-			Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
-
-
-		}
 		tagActiveReportStatusList = tagActiveReportStatusList.OrderBy(sel => sel.TagID).ToList();   //using System.Linq;
 	}
 	public void AddMsg()
