@@ -23,8 +23,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public ListView listViewVertical;
     public ListView listViewHorizontal;
 	public ListView listViewTagID;
-	public ListView listViewTest;
-
 	public DemoItem itemVPrefab;
     public DemoItem itemHPrefab;
 
@@ -41,6 +39,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private GameObject mtxt_Status;
 	public GameObject[] Image_light;
+
+
+	//public Text msgText;
+	public static DemoMainCanvas1 instance;
+	public bool isShow;
+
+
+
 	private string log_Status;
 
 
@@ -96,7 +102,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private void Awake()
 	{
+		instance = this;
 		Debug.Log("Awake()");
+
 		_client = GetComponent<TCPTestClient>();
 		_client.OnConnected += OnClientConnected;
 		_client.OnDisconnected += OnClientDisconnected;
@@ -311,22 +319,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 			//}
         }
 
-
 		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-		mtxt_Status = GameObject.Find("txt_Status");
-		log_Status = mtxt_Status.GetComponent<Text>().text;
-		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);		//??????
-
-		//////char[] separators = new char[] {' ', '|' };
-		//////string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-		////////foreach (var sub in subs)
-		////////{
-		////////	Debug.Log($"Substring: " + sub);
-		////////}
-		//////tag_id = subs[1];
-		//////Debug.Log($"Substring:" + tag_id);
-		//////      tempIndex = tagid_status_list.FindIndex(z => z.TagID == tag_id);
-		//////      Debug.Log("Update log_Status = " + log_Status + ",  index = " + tempIndex);
+		//mtxt_Status = GameObject.Find("txt_Status");
+		//log_Status = mtxt_Status.GetComponent<Text>().text;
+		log_Status = UIlog_Status.text;
+		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
 		if (tempIndex >= 0)
 		{
 
@@ -587,7 +584,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//string sPattern = "^#";
 
 		Debug.Log("SendButtonGPIO= " + index);
-		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage+" buttonlock = " + buttonlock);
+		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
 		if (buttonlock > 0)
         {
 			return;
@@ -1060,57 +1057,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		//prefab.gameObject.GetComponent<Button>().onClick.AddListener(listViewOnClickTest);
     }
-
-	public void listViewOnClick(Text msg)
-    {
-		string tag_id;
-		//Debug.Log("listViewOnClick: " + msg.text);
-		Debug.Log("msg: " + msg.text + ",  buttonlock =" + buttonlock);
-
-		if (buttonlock > 0)
-		{
-			return;
-		}
-
-		log_Status = msg.text;
-
-		char[] separators = new char[] { ' ', '|' };
-        string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-        //foreach (var sub in subs)
-        //{
-        //	Debug.Log($"Substring: " + sub);
-        //}
-
-        tag_id = subs[1].Substring(0, 10);
-
-        //tag_id = subs[1];
-		Debug.Log($"Substring:" + tag_id);
-        //Debug.Log("Update log_Status = " + log_Status + ",  index = " + tempIndex);
-
-        mtxt_Status = GameObject.Find("txt_Status");
-		mtxt_Status.GetComponent<Text>().text = tag_id;
-
-		//serverMessage = msg.text;
-		//mtxt_Status.GetComponent<Text>().text = serverMessage;
-
-		//cache = string.Format("<color=red>{0}</color>\n", serverMessage);
-		//mtxt_Status.GetComponent<Text>().text = cache;
-
-		//this.GetComponent<DemoMainCanvas1>().testMsg = msg.text;
-
-		//if (serverMessage != null)
-		//{
-		//	Debug.Log("serverMessage111111 = " + serverMessage);
-		//	//serverMessage = null;
-		//}
-
-		//Debug.Log("Time:" + Time.time);
-		//txt_Status.GetComponent<Text>().text = msg.text;
-		//statusMsg.Add("listViewOnClick : " );
-		//this.OnClientLog("listViewOnClick...............");
-		//Debug.Log("listViewTagID.Count: " + listViewTagID.ItemCount);
-		//Debug.Log("listViewTagID.Count: " + listViewTagID.ItemCount);
-	}
 
     private void RemoveItem(ListView lv)
     {
