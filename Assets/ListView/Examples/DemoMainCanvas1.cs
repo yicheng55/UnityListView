@@ -23,6 +23,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 	public ListView listViewVertical;
     public ListView listViewHorizontal;
 	public ListView listViewTagID;
+	public ListView listViewTest;
+
 	public DemoItem itemVPrefab;
     public DemoItem itemHPrefab;
 
@@ -585,7 +587,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//string sPattern = "^#";
 
 		Debug.Log("SendButtonGPIO= " + index);
-		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
+		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage+" buttonlock = " + buttonlock);
 		if (buttonlock > 0)
         {
 			return;
