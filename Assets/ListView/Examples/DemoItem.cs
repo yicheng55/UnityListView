@@ -54,6 +54,7 @@ public class DemoItem : MonoBehaviour
             tag_id = subs[1].Substring(0, 10);
             Debug.Log("tag_id: " + tag_id);
             DemoMainCanvas1.instance.UIlog_Status.text = tag_id;
+            DemoMainCanvas1.instance.getButtonClickMsg(msg.text);
         }
         else
         {

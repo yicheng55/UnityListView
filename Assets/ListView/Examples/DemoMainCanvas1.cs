@@ -416,6 +416,13 @@ public class DemoMainCanvas1 : MonoBehaviour
 
     }
 
+	public void getButtonClickMsg(string msg)
+	{
+
+		Debug.Log("getButtonClickMsg(msg:)" + msg);
+		//msgText.text = msg;
+	}
+
 
 	//private void OnDisable()
 	//{
