@@ -43,7 +43,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	//public Text msgText;
 	public static DemoMainCanvas1 instance;
-	public bool isShow;
+	//public bool isShow;
 
 
 
@@ -61,7 +61,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	//private char[] txt_Tagid = {'T','E','S','T'};
 
 	private int lastindex = -1;
-	private int buttonlock = -1;
+	public int buttonlock = -1;
 
 	List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
@@ -217,16 +217,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 					//	//tbx_Port.text = line;
 					//	//Debug.Log("Case= " + index + "  line: " + line);
 					//	//break;
-
-					//case 2:
-					//case 3:
-					//case 4:
-					//case 5:
-					//case 6:
-					//case 7:
-					//case 8:
-					//case 9:
-					//case 10:
 					case int n when (n < 20):
 						//tbx_Txt[index - 2].text = line;
 						//tagActiveReportStatus.TagID = line;
@@ -243,8 +233,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 					default:
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
-
-
 				}
 				index++;
 			}
@@ -258,7 +246,6 @@ public class DemoMainCanvas1 : MonoBehaviour
 
         Debug.Log("TagidList.cfg were lines=" + counter);
 		Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
-
 
 		counter = 0;
 		foreach (TAGID_LIST_STATUS myStringList in tagid_status_list)
@@ -319,86 +306,86 @@ public class DemoMainCanvas1 : MonoBehaviour
 			//}
         }
 
-		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-		//mtxt_Status = GameObject.Find("txt_Status");
-		//log_Status = mtxt_Status.GetComponent<Text>().text;
-		log_Status = UIlog_Status.text;
-		tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
-		if (tempIndex >= 0)
-		{
+        //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+        //mtxt_Status = GameObject.Find("txt_Status");
+        //log_Status = mtxt_Status.GetComponent<Text>().text;
 
-			UpdateTagIdList(tempIndex);
-			cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
-			mtxt_Status.GetComponent<Text>().text = cache;
+        log_Status = UIlog_Status.text;
+        tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
+        if (tempIndex >= 0)
+        {
 
-			if (lastindex >= 0)
-			{
-				Image_light[lastindex].SetActive(true);
-				btn_Light_txt[lastindex].text = "OFF";
-				lastindex = -1;
-			}
+            UpdateTagIdList(tempIndex);
+            cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
+            mtxt_Status.GetComponent<Text>().text = cache;
 
-			lastIndexTagId = tempIndex;
-			//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-			//receiveNum = -2;
-		}
+            if (lastindex >= 0)
+            {
+                Image_light[lastindex].SetActive(true);
+                btn_Light_txt[lastindex].text = "OFF";
+                lastindex = -1;
+            }
 
-		//if (Input.GetKeyDown(KeyCode.H))
-		//{
-		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
-		//    {
-		//        RemoveItem(listViewHorizontal);
-		//    }
-		//    else // h: add
-		//    {
-		//        AddItem(listViewHorizontal, itemHPrefab);
-		//    }
-		//}
+            lastIndexTagId = tempIndex;
+            //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+            //receiveNum = -2;
+        }
 
-
-		//if(mListMsg.Count > 0)
-		//{
-		//          //RemoveItemAll(listViewVertical);
-		//          for (int i=0; i < mListMsg.Count; i++)
-		//          {
-		//              Debug.Log(mListMsg[i]);
-		//              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
-
-		//	}
-		//	//foreach (string myStringList in mListMsg)  //error bug.
-		//	//{
-		//	//	Debug.Log(myStringList);
-		//	//	AddItem(listViewVertical, itemVPrefab, myStringList);
-		//	//}
-		//	mListMsg.Clear();
-		//}
-		//if(statusMsg.Count > 0)
-		//      {
-		//	txt_Status.text = "";
-		//	string s = new string(txt_Tagid);
-		//	for (int i = 0; i<statusMsg.Count; i++)
-		//          {
-		//              //txt_Status.text += statusMsg[i];
-		//              txt_Status.text += statusMsg[i] + "TagID =" + s;
-		//          }
-		//	statusMsg.Clear();
-		//      }
-
-		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
-		//lock (cacheLock)
-		//{
-		//	if (!string.IsNullOrEmpty(cache))
-		//	{
-		//		//TextWindow.text += string.Format("{0}", cache);
-		//		AddItem(listViewVertical, itemVPrefab, cache);
-		//		cache = null;
-		//	}
-		//}
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
+        //    {
+        //        RemoveItem(listViewHorizontal);
+        //    }
+        //    else // h: add
+        //    {
+        //        AddItem(listViewHorizontal, itemHPrefab);
+        //    }
+        //}
 
 
-	}
+        //if(mListMsg.Count > 0)
+        //{
+        //          //RemoveItemAll(listViewVertical);
+        //          for (int i=0; i < mListMsg.Count; i++)
+        //          {
+        //              Debug.Log(mListMsg[i]);
+        //              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
 
-	private void OnTick(object source, ElapsedEventArgs e)
+        //	}
+        //	//foreach (string myStringList in mListMsg)  //error bug.
+        //	//{
+        //	//	Debug.Log(myStringList);
+        //	//	AddItem(listViewVertical, itemVPrefab, myStringList);
+        //	//}
+        //	mListMsg.Clear();
+        //}
+        //if(statusMsg.Count > 0)
+        //      {
+        //	txt_Status.text = "";
+        //	string s = new string(txt_Tagid);
+        //	for (int i = 0; i<statusMsg.Count; i++)
+        //          {
+        //              //txt_Status.text += statusMsg[i];
+        //              txt_Status.text += statusMsg[i] + "TagID =" + s;
+        //          }
+        //	statusMsg.Clear();
+        //      }
+
+        //Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
+        //lock (cacheLock)
+        //{
+        //	if (!string.IsNullOrEmpty(cache))
+        //	{
+        //		//TextWindow.text += string.Format("{0}", cache);
+        //		AddItem(listViewVertical, itemVPrefab, cache);
+        //		cache = null;
+        //	}
+        //}
+
+    }
+
+    private void OnTick(object source, ElapsedEventArgs e)
 	{
 		//print(e.SignalTime);
         //receiveNum = 0;
@@ -421,6 +408,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		Debug.Log("getButtonClickMsg(msg:)" + msg);
 		Debug.Log("listViewTagID.ItemCount: " + listViewTagID.ItemCount + "   itemno="+ itemno);
+		Debug.Log("TagID= " + tagid_status_list[itemno].TagID);
 		//listViewTagID.GetItem(0).
 
 		//listViewTagID.GetItem(i).GetComponent<DemoItem>().SetText(cache);
@@ -599,9 +587,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//string sPattern = "^#";
 
 		Debug.Log("SendButtonGPIO= " + index);
-		Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
+		//Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
 		if (buttonlock > 0)
         {
+			Debug.Log("SendButtonGPIO buttonlock= " + buttonlock);
 			return;
 		}
 
