@@ -9,6 +9,8 @@ public class DemoItem : MonoBehaviour
     [SerializeField]
     private Text _text;
 
+    public int index;
+
     private void Awake()
     {
         if (_image == null)
@@ -52,9 +54,9 @@ public class DemoItem : MonoBehaviour
                     //}
 
             tag_id = subs[1].Substring(0, 10);
-            Debug.Log("tag_id: " + tag_id);
+            Debug.Log("tag_id: " + tag_id + "  No:" + index);
             DemoMainCanvas1.instance.UIlog_Status.text = tag_id;
-            DemoMainCanvas1.instance.getButtonClickMsg(msg.text);
+            DemoMainCanvas1.instance.getButtonClickMsg(msg.text, index);
         }
         else
         {

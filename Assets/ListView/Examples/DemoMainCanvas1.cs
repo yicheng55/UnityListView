@@ -265,7 +265,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			//Debug.Log(myStringList.TagID);
 			cache = counter.ToString("000") + "   |   " + myStringList.TagID;
-			AddItem(listViewTagID, itemVPrefab, cache);
+			AddItem(listViewTagID, itemVPrefab, cache,counter);
 			counter++;
 		}
 
@@ -416,10 +416,18 @@ public class DemoMainCanvas1 : MonoBehaviour
 
     }
 
-	public void getButtonClickMsg(string msg)
+	public void getButtonClickMsg(string msg, int itemno)
 	{
 
 		Debug.Log("getButtonClickMsg(msg:)" + msg);
+		Debug.Log("listViewTagID.ItemCount: " + listViewTagID.ItemCount + "   itemno="+ itemno);
+		//listViewTagID.GetItem(0).
+
+		//listViewTagID.GetItem(i).GetComponent<DemoItem>().SetText(cache);
+
+		//listViewTagID.GetItem
+
+
 		//msgText.text = msg;
 	}
 
@@ -544,7 +552,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		if (!_client.IsConnected)
 		{
 			string clientMessage = "SocketConnection is diasble!!!";
-			AddItem(listViewVertical, itemVPrefab, clientMessage);
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
 			return;
 		}
 		try
@@ -578,7 +586,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			string clientMessage = "Socket Connection is fail !!!";
 			Debug.Log("Socket exception: " + socketException);
-			AddItem(listViewVertical, itemVPrefab, clientMessage);
+			//AddItem(listViewVertical, itemVPrefab, clientMessage);
 		}
 
 
@@ -875,11 +883,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 	}
 	public void AddMsg()
     {
-		AddItem(listViewVertical, itemVPrefab, mListMsg[mListMsg.Count-1]);
+		//AddItem(listViewVertical, itemVPrefab, mListMsg[mListMsg.Count-1]);
 	}
 	public void AddMsg(string msg)
 	{
-		AddItem(listViewVertical, itemVPrefab, msg);
+		//AddItem(listViewVertical, itemVPrefab, msg);
 	}
 
 	public void UpdateMsg(int index)
@@ -889,7 +897,7 @@ public class DemoMainCanvas1 : MonoBehaviour
             for (int i = listViewVertical.ItemCount ; i < tagActiveReportStatusList.Count; i++)
             {
                 cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-				AddItem(listViewVertical, itemVPrefab, cache);
+				AddItem(listViewVertical, itemVPrefab, cache,i);
 				//Debug.Log(cache);
 			}
 
@@ -931,7 +939,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 				//cache = string.Format("<color=black>{0}</color>\n", tagid_status_list[i].TagID);      //black
 				//AddItem(listViewTagID, itemVPrefab, cache);
 				//Debug.Log(cache);
-				AddItem(listViewTagID, itemVPrefab, tagid_status_list[i].TagID);
+				AddItem(listViewTagID, itemVPrefab, tagid_status_list[i].TagID, i);
 			}
 
 		}
@@ -1024,7 +1032,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	}
 
 
-	private void AddItem(ListView lv, DemoItem prefab, string msg)
+	private void AddItem(ListView lv, DemoItem prefab, string msg,int index)
     {
         var color = new Color()
         {
@@ -1058,6 +1066,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			item.SetContent(msg, color);
 		}
 
+		item.index = index;
 
 		lv.AddItem(item.gameObject);
         Debug.Log("lv.ItemCount= " + lv.ItemCount);
