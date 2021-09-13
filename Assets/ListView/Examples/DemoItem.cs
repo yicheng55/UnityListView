@@ -40,24 +40,24 @@ public class DemoItem : MonoBehaviour
 
     public void listViewOnClick(Text msg)
     {
-        string tag_id;
-        string log_Status;
+        //////string tag_id;
+        //////string log_Status;
         Debug.Log("listViewOnClick msg: " + msg.text);
-        log_Status = msg.text;
+        //////log_Status = msg.text;
         if (DemoMainCanvas1.instance.buttonlock < 0)
         {
-            char[] separators = new char[] { ' ', '|' };
-            string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                    //foreach (var sub in subs)
-                    //{
-                    //	Debug.Log($"Substring: " + sub);
-                    //}
+            //////char[] separators = new char[] { ' ', '|' };
+            //////string[] subs = log_Status.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            //////        //foreach (var sub in subs)
+            //////        //{
+            //////        //	Debug.Log($"Substring: " + sub);
+            //////        //}
 
-            tag_id = subs[1].Substring(0, 10);
-            Debug.Log("tag_id: " + tag_id + "  No:" + index);
-            DemoMainCanvas1.instance.UIlog_Status.text = tag_id;
+            //////tag_id = subs[1].Substring(0, 10);
+            //////Debug.Log("tag_id: " + tag_id + "  No:" + index);
+            ////////DemoMainCanvas1.instance.UIlog_Status.text = tag_id;
 
-            //DemoMainCanvas1.instance.UIlog_Status.text = msg.text;
+            ////////DemoMainCanvas1.instance.UIlog_Status.text = msg.text;
             DemoMainCanvas1.instance.getButtonClickMsg(msg.text, index);
         }
         else

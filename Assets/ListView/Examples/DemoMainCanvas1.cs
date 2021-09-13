@@ -77,6 +77,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private int tempIndex = -1;
 	private int lastIndexTagId = -1;
+	private int listViewTagIdIndex = -1;
 
 	private struct TAG_ACTIVE_REPORT_STATUS
 	{
@@ -306,30 +307,36 @@ public class DemoMainCanvas1 : MonoBehaviour
 			//}
         }
 
-        //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-        //mtxt_Status = GameObject.Find("txt_Status");
-        //log_Status = mtxt_Status.GetComponent<Text>().text;
+		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+		//mtxt_Status = GameObject.Find("txt_Status");
+		//log_Status = mtxt_Status.GetComponent<Text>().text;
 
-        log_Status = UIlog_Status.text;
-        tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
-        if (tempIndex >= 0)
-        {
+		//log_Status = UIlog_Status.text;
+		//tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status);
+		//tempIndex = listViewTagIdIndex;
 
-            UpdateTagIdList(tempIndex);
-            cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[tempIndex].TagID);    //red
-            mtxt_Status.GetComponent<Text>().text = cache;
+		//*********************************
+		//////if (listViewTagIdIndex >= 0)
+  //////      {
 
-            if (lastindex >= 0)
-            {
-                Image_light[lastindex].SetActive(true);
-                btn_Light_txt[lastindex].text = "OFF";
-                lastindex = -1;
-            }
+  //////          UpdateTagIdList(listViewTagIdIndex);
+  //////          //cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[listViewTagIdIndex].TagID);    //red
+  //////          ////mtxt_Status.GetComponent<Text>().text = cache;
 
-            lastIndexTagId = tempIndex;
-            //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-            //receiveNum = -2;
-        }
+  //////          if (lastindex >= 0)
+  //////          {
+  //////              Image_light[lastindex].SetActive(true);
+  //////              btn_Light_txt[lastindex].text = "OFF";
+  //////              lastindex = -1;
+  //////          }
+
+  //////          lastIndexTagId = listViewTagIdIndex;
+		//////	listViewTagIdIndex = -1;
+		//////	//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+		//////	//receiveNum = -2;
+		//////}
+		///
+		//******************************************
 
         //if (Input.GetKeyDown(KeyCode.H))
         //{
@@ -405,18 +412,25 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public void getButtonClickMsg(string msg, int itemno)
 	{
-
-		Debug.Log("getButtonClickMsg(msg:)" + msg);
+		//////Debug.Log("getButtonClickMsg(msg:)" + msg);
 		Debug.Log("listViewTagID.ItemCount: " + listViewTagID.ItemCount + "   itemno="+ itemno);
 		Debug.Log("TagID= " + tagid_status_list[itemno].TagID);
-		//listViewTagID.GetItem(0).
+		UIlog_Status.text = msg;
+		listViewTagIdIndex = itemno;
+
+		UpdateTagIdList(listViewTagIdIndex);
+		if (lastindex >= 0)
+		{
+			Image_light[lastindex].SetActive(true);
+			btn_Light_txt[lastindex].text = "OFF";
+			lastindex = -1;
+		}
+
+		lastIndexTagId = listViewTagIdIndex;
+		//listViewTagIdIndex = -1;
+
 
 		//listViewTagID.GetItem(i).GetComponent<DemoItem>().SetText(cache);
-
-		//listViewTagID.GetItem
-
-
-		//msgText.text = msg;
 	}
 
 
@@ -743,7 +757,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			ack_data[idx] = "";
 		}
 		tag_id = ack_data[2];
-		buttonlock = -1;
+
 		//Debug.Log("tag_id = " + tag_id);
 
 		//item1 = ListView_Test.Find(tag_id);
@@ -779,9 +793,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//////	//mListMsg.Add(cache);
 		//////}
 
+		buttonlock = -1;
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
 		//Debug.Log("tempIndex... : " + tempIndex);
-
 		if( tempIndex == -1)
         {
 			TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
@@ -808,7 +822,8 @@ public class DemoMainCanvas1 : MonoBehaviour
             //	mListMsg.Add(cache);
             //}
             Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
-        }
+			Debug.Log(tagActiveReportStatus.TagID + "   |   " + tagActiveReportStatus.Counts);
+		}
         else
         {
 			//tagActiveReportStatusList[tempIndex].TagID = tag_id;
