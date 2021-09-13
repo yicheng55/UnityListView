@@ -730,10 +730,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private void OnClientReceivedMessage(string message)
 	{
 		string finalMessage = message;
-		//Debug.Log("OnClientLog: " + message);
+        Debug.Log("OnClientReceivedMessage: " + message);
 
-		//CSV 解碼
-		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+        //CSV 解碼
+        var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 		var matches = regex.Matches(finalMessage);
 		int csv_total_fields = matches.Count;
 		string[] ack_data = new string[32];
@@ -792,7 +792,12 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//////	//cache = string.Format("<color=red>{0}</color>\n", tag_id);
 		//////	//mListMsg.Add(cache);
 		//////}
+		string author1 = "2100";
+		if (String.Equals(tag_id, author1))
+        {
+			Debug.Log("tag_id = 2100 compare");
 
+		}
 		buttonlock = -1;
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
 		//Debug.Log("tempIndex... : " + tempIndex);
