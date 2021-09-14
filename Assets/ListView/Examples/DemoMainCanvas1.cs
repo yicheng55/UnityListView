@@ -62,6 +62,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	private int lastindex = -1;
 	public int buttonlock = -1;
+	public int buttonIndexActive = -1;
 
 	List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
@@ -78,6 +79,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private int tempIndex = -1;
 	private int lastIndexTagId = -1;
 	private int listViewTagIdIndex = -1;
+	private int update_btn_LightFlage = -1;
 
 	private struct TAG_ACTIVE_REPORT_STATUS
 	{
@@ -317,20 +319,20 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		//*********************************
 		//////if (listViewTagIdIndex >= 0)
-  //////      {
+		//////      {
 
-  //////          UpdateTagIdList(listViewTagIdIndex);
-  //////          //cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[listViewTagIdIndex].TagID);    //red
-  //////          ////mtxt_Status.GetComponent<Text>().text = cache;
+		//////          UpdateTagIdList(listViewTagIdIndex);
+		//////          //cache = string.Format("<color=red>{0}</color>\n", tagid_status_list[listViewTagIdIndex].TagID);    //red
+		//////          ////mtxt_Status.GetComponent<Text>().text = cache;
 
-  //////          if (lastindex >= 0)
-  //////          {
-  //////              Image_light[lastindex].SetActive(true);
-  //////              btn_Light_txt[lastindex].text = "OFF";
-  //////              lastindex = -1;
-  //////          }
+		//////          if (lastindex >= 0)
+		//////          {
+		//////              Image_light[lastindex].SetActive(true);
+		//////              btn_Light_txt[lastindex].text = "OFF";
+		//////              lastindex = -1;
+		//////          }
 
-  //////          lastIndexTagId = listViewTagIdIndex;
+		//////          lastIndexTagId = listViewTagIdIndex;
 		//////	listViewTagIdIndex = -1;
 		//////	//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
 		//////	//receiveNum = -2;
@@ -338,59 +340,84 @@ public class DemoMainCanvas1 : MonoBehaviour
 		///
 		//******************************************
 
-        //if (Input.GetKeyDown(KeyCode.H))
-        //{
-        //    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
-        //    {
-        //        RemoveItem(listViewHorizontal);
-        //    }
-        //    else // h: add
-        //    {
-        //        AddItem(listViewHorizontal, itemHPrefab);
-        //    }
-        //}
+		//if (Input.GetKeyDown(KeyCode.H))
+		//{
+		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
+		//    {
+		//        RemoveItem(listViewHorizontal);
+		//    }
+		//    else // h: add
+		//    {
+		//        AddItem(listViewHorizontal, itemHPrefab);
+		//    }
+		//}
 
 
-        //if(mListMsg.Count > 0)
-        //{
-        //          //RemoveItemAll(listViewVertical);
-        //          for (int i=0; i < mListMsg.Count; i++)
-        //          {
-        //              Debug.Log(mListMsg[i]);
-        //              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+		//if(mListMsg.Count > 0)
+		//{
+		//          //RemoveItemAll(listViewVertical);
+		//          for (int i=0; i < mListMsg.Count; i++)
+		//          {
+		//              Debug.Log(mListMsg[i]);
+		//              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
 
-        //	}
-        //	//foreach (string myStringList in mListMsg)  //error bug.
-        //	//{
-        //	//	Debug.Log(myStringList);
-        //	//	AddItem(listViewVertical, itemVPrefab, myStringList);
-        //	//}
-        //	mListMsg.Clear();
-        //}
-        //if(statusMsg.Count > 0)
-        //      {
-        //	txt_Status.text = "";
-        //	string s = new string(txt_Tagid);
-        //	for (int i = 0; i<statusMsg.Count; i++)
-        //          {
-        //              //txt_Status.text += statusMsg[i];
-        //              txt_Status.text += statusMsg[i] + "TagID =" + s;
-        //          }
-        //	statusMsg.Clear();
-        //      }
+		//	}
+		//	//foreach (string myStringList in mListMsg)  //error bug.
+		//	//{
+		//	//	Debug.Log(myStringList);
+		//	//	AddItem(listViewVertical, itemVPrefab, myStringList);
+		//	//}
+		//	mListMsg.Clear();
+		//}
+		//if(statusMsg.Count > 0)
+		//      {
+		//	txt_Status.text = "";
+		//	string s = new string(txt_Tagid);
+		//	for (int i = 0; i<statusMsg.Count; i++)
+		//          {
+		//              //txt_Status.text += statusMsg[i];
+		//              txt_Status.text += statusMsg[i] + "TagID =" + s;
+		//          }
+		//	statusMsg.Clear();
+		//      }
 
-        //Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
-        //lock (cacheLock)
-        //{
-        //	if (!string.IsNullOrEmpty(cache))
-        //	{
-        //		//TextWindow.text += string.Format("{0}", cache);
-        //		AddItem(listViewVertical, itemVPrefab, cache);
-        //		cache = null;
-        //	}
-        //}
+		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
+		//lock (cacheLock)
+		//{
+		//	if (!string.IsNullOrEmpty(cache))
+		//	{
+		//		//TextWindow.text += string.Format("{0}", cache);
+		//		AddItem(listViewVertical, itemVPrefab, cache);
+		//		cache = null;
+		//	}
+		//}
 
-    }
+		if(update_btn_LightFlage >= 0)
+        {
+			if (lastindex == buttonIndexActive)
+			{
+				Image_light[lastindex].SetActive(true);
+				btn_Light_txt[lastindex].text = "OFF";
+				lastindex = -1;
+				Debug.Log("btn_Light_txt = OFF");
+			}
+			else
+			{
+				if (lastindex >= 0)
+				{
+					Image_light[lastindex].SetActive(true);
+					btn_Light_txt[lastindex].text = "OFF";
+				}
+				////buttonIndexActive = index;
+				Image_light[buttonIndexActive].SetActive(false);
+				btn_Light_txt[buttonIndexActive].text = "ON";
+				lastindex = buttonIndexActive;
+				Debug.Log("btn_Light_txt = ON");
+			}
+			update_btn_LightFlage = -1;
+		}
+
+	}
 
     private void OnTick(object source, ElapsedEventArgs e)
 	{
@@ -630,27 +657,27 @@ public class DemoMainCanvas1 : MonoBehaviour
 			if(lastindex == index )
             {
 				//output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, "00");
-				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, "00");
-				Image_light[index].SetActive(true);
-				btn_Light_txt[index].text = "OFF";
-				lastindex = -1;
+				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, "0");
+				//////Image_light[index].SetActive(true);
+				//////btn_Light_txt[index].text = "OFF";
+				//////lastindex = -1;
 			}
 			else
             {
-				//output = String.Format(clientMessage, mtxt_Status.GetComponent<Text>().text, (index + 1).ToString("X02"));
-				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, (index + 1).ToString("X02"));
-				if ( lastindex >= 0)
-                {
-					Image_light[lastindex].SetActive(true);
-					btn_Light_txt[lastindex].text = "OFF";
-				}
-				Image_light[index].SetActive(false);
-				btn_Light_txt[index].text = "ON";
-				lastindex = index;
+				//output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, (index + 1).ToString("X02"));
+				output = String.Format(clientMessage, tagid_status_list[lastIndexTagId].TagID, (index + 1).ToString());
+                //////if ( lastindex >= 0)
+                //////            {
+                //////	Image_light[lastindex].SetActive(true);
+                //////	btn_Light_txt[lastindex].text = "OFF";
+                //////}
+                buttonIndexActive = index;
+                //////Image_light[index].SetActive(false);
+                //////btn_Light_txt[index].text = "ON";
+                //////lastindex = index;
+            }
 
-			}
-
-			Debug.Log(" --- output : " + output);
+            Debug.Log(" --- output : " + output);
 
 			//System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 			//string output = regex.Replace(clientMessage, "Bob");
@@ -796,8 +823,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 		if (String.Equals(tag_id, author1))
         {
 			Debug.Log("tag_id = 2100 compare");
+			update_btn_LightFlage = 1;
 
 		}
+
 		buttonlock = -1;
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
 		//Debug.Log("tempIndex... : " + tempIndex);
@@ -844,50 +873,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 			tagActiveReportStatus.Counts = (Convert.ToInt32(tagActiveReportStatusList[tempIndex].Counts)+1).ToString();
 			tagActiveReportStatus.Time = ConvertIntDateTime(Convert.ToInt32(ack_data[1])).ToString();
 
-
 			tagActiveReportStatusList[tempIndex] = tagActiveReportStatus;
 
 			Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
-
-
-			//////cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[tempIndex].TagID, tagActiveReportStatusList[tempIndex].Counts);
-			//////mListMsg[tempIndex] = cache;
-
-			//////if(receiveNum == -2)
-			//////         {
-			//////	receiveNum = tempIndex;
-			//////}
-
-			//UpdateMsg(tempIndex);
-
-			//tagActiveReportStatusList.Sort();
-			//         for (int i = 0; i < tagActiveReportStatusList.Count; i++)
-			//{
-			//	Debug.Log(tagActiveReportStatusList[i].TagID);
-			//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-			//             //mListMsg.Add(cache);
-			//             mListMsg[i] = cache;
-			//         }
-
-			//Debug.Log("tagActiveReportStatusList[tempIndex].Counts  = " + tagActiveReportStatusList[tempIndex].Counts);
-			//Debug.Log("tagActiveReportStatusList.Count = " + tagActiveReportStatusList.Count);
-
-
 		}
-
-		//for (int i = 0; i < mListMsg.Count; i++)
-		//{
-		//	Debug.Log(tagActiveReportStatusList[i].TagID);
-		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-		//	//mListMsg.Add(cache);
-		//	mListMsg[i] = cache;
-		//}
-		//for(int i = mListMsg.Count+1; i < tagActiveReportStatusList.Count; i++)
-  //      {
-		//	cache = string.Format("<color=red>{0}  |  {1} </color>\n", tagActiveReportStatusList[i].TagID, tagActiveReportStatusList[i].Counts);
-		//	mListMsg.Add(cache);
-  //      }
-
 
 	}
 	public void AddMsg()
