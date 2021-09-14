@@ -21,16 +21,16 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private TCPTestClient _client;
 
 	public ListView listViewVertical;
-    public ListView listViewHorizontal;
+	public ListView listViewHorizontal;
 	public ListView listViewTagID;
 	public DemoItem itemVPrefab;
-    public DemoItem itemHPrefab;
+	public DemoItem itemHPrefab;
 
 	public InputField[] tbx_Txt;
 
 	public InputField tbx_IpAddr;
 	public InputField tbx_Port;
-	public Text  UIlog_Status;
+	public Text UIlog_Status;
 	public Dropdown mDropWakeUpSec;
 
 	public Toggle m_ToggleConnect;
@@ -59,19 +59,20 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private bool running;
 	private static System.Timers.Timer aTimer;
 	//private char[] txt_Tagid = {'T','E','S','T'};
+	public int buttonlock = -1;
 
 	private int lastindex = -1;
-	public int buttonlock = -1;
-	public int buttonIndexActive = -1;
+	private int buttonIndexActive = -1;
+	private int receiveindex = -1;
 
 	List<string> mListMsg = new List<string>();
 	List<string> statusMsg = new List<string>();
 
 	List<string> item1 = new List<string>();
 
-    //List<List<string>> ListView_Test = new List<List<string>>();
-    //public List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
-    private List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
+	//List<List<string>> ListView_Test = new List<List<string>>();
+	//public List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
+	private List<TAG_ACTIVE_REPORT_STATUS> tagActiveReportStatusList = new List<TAG_ACTIVE_REPORT_STATUS>();
 
 	private List<TAGID_LIST_STATUS> tagid_status_list = new List<TAGID_LIST_STATUS>();
 	TAGID_LIST_STATUS tagidListStatus = new TAGID_LIST_STATUS();
@@ -115,10 +116,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 		_client.OnLog += OnClientLog;
 	}
 	private int receiveNum = -2;
-		// Start is called before the first frame update
+	// Start is called before the first frame update
 	void Start()
 	{
-		int counter = 0, index=0;
+		int counter = 0, index = 0;
 		string line;
 
 		// Log some debug information only if this is a debug build
@@ -131,18 +132,18 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//m_ToggleConnect = GetComponent<Toggle>();
 		//Add listener for when the state of the Toggle changes, and output the state
 		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
-        TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
+		TAG_ACTIVE_REPORT_STATUS tagActiveReportStatus = new TAG_ACTIVE_REPORT_STATUS();
 
-        aTimer = new System.Timers.Timer(6000);
+		aTimer = new System.Timers.Timer(1000);
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
 
 
 		string sPattern = "^#";
-        // Read the file and display it line by line.  
-        System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
-        //System.IO.StreamReader file = new System.IO.StreamReader(@"TagidList.cfg");
-        while ((line = file.ReadLine()) != null)
+		// Read the file and display it line by line.  
+		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
+		//System.IO.StreamReader file = new System.IO.StreamReader(@"TagidList.cfg");
+		while ((line = file.ReadLine()) != null)
 		{
 			if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
 			{
@@ -152,11 +153,11 @@ public class DemoMainCanvas1 : MonoBehaviour
 			{
 				//Debug.Log(line);
 				//Debug.Log(" - invalid");
-				switch(index)
-                {
+				switch (index)
+				{
 					case 0:
 						tbx_IpAddr.text = line;
-						Debug.Log("Case= " + index +"  line: " + line);
+						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 					case 1:
 						tbx_Port.text = line;
@@ -175,10 +176,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 					case 11:
 						tbx_Txt[index - 2].text = line;
 						tagActiveReportStatus.TagID = line;
-                        //tagActiveReportStatusList.Add(tagActiveReportStatus);
-                        ////AddItem(listViewVertical, itemVPrefab, index.ToString());
-                        //AddItem(listViewTagID, itemVPrefab, line);
-                        //Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
+						//tagActiveReportStatusList.Add(tagActiveReportStatus);
+						////AddItem(listViewVertical, itemVPrefab, index.ToString());
+						//AddItem(listViewTagID, itemVPrefab, line);
+						//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 
@@ -245,9 +246,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		file.Close();
 
-        tagid_status_list = tagid_status_list.OrderBy(sel => sel.TagID).ToList();       //using System.Linq;
+		tagid_status_list = tagid_status_list.OrderBy(sel => sel.TagID).ToList();       //using System.Linq;
 
-        Debug.Log("TagidList.cfg were lines=" + counter);
+		Debug.Log("TagidList.cfg were lines=" + counter);
 		Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
 
 		counter = 0;
@@ -255,7 +256,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			//Debug.Log(myStringList.TagID);
 			cache = counter.ToString("000") + "   |   " + myStringList.TagID;
-			AddItem(listViewTagID, itemVPrefab, cache,counter);
+			AddItem(listViewTagID, itemVPrefab, cache, counter);
 			counter++;
 		}
 
@@ -271,7 +272,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	}
 
 	private void Update()
-    {
+	{
 		string log_Status = "";
 		//      if (Input.GetKeyDown(KeyCode.V))
 		//      {
@@ -300,14 +301,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//Debug.Log("testMsg = " + testMsg);
 
 		if (receiveNum > -2)
-        {
+		{
 			//if(receiveNum >=0 )
 			//         {
 			//	UpdateMsg(receiveNum);
 			//	//txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
 			//	receiveNum = -2;
 			//}
-        }
+		}
 
 		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
 		//mtxt_Status = GameObject.Find("txt_Status");
@@ -392,55 +393,75 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//	}
 		//}
 
-		if(update_btn_LightFlage >= 0)
-        {
-			if (lastindex == buttonIndexActive)
+		if (update_btn_LightFlage >= 0)
+		{
+			if (receiveindex == 1)
 			{
-				Image_light[lastindex].SetActive(true);
-				btn_Light_txt[lastindex].text = "OFF";
-				lastindex = -1;
-				Debug.Log("btn_Light_txt = OFF");
+
+				UIlog_Status.text = "WakeUp set successful";
+				receiveindex = -1;
+			}
+			else if (receiveindex == -2)
+			{
+
+				UIlog_Status.text = "Time out......";
+				receiveindex = -1;
 			}
 			else
 			{
-				if (lastindex >= 0)
+				if (lastindex == buttonIndexActive)
 				{
 					Image_light[lastindex].SetActive(true);
 					btn_Light_txt[lastindex].text = "OFF";
+					lastindex = -1;
+					buttonIndexActive = -1;
+					Debug.Log("btn_Light_txt = OFF");
+					UIlog_Status.text = "Button = OFF";
 				}
-				////buttonIndexActive = index;
-				Image_light[buttonIndexActive].SetActive(false);
-				btn_Light_txt[buttonIndexActive].text = "ON";
-				lastindex = buttonIndexActive;
-				Debug.Log("btn_Light_txt = ON");
+				else
+				{
+					if (lastindex >= 0)
+					{
+						Image_light[lastindex].SetActive(true);
+						btn_Light_txt[lastindex].text = "OFF";
+					}
+					////buttonIndexActive = index;
+					Image_light[buttonIndexActive].SetActive(false);
+					btn_Light_txt[buttonIndexActive].text = "ON";
+					lastindex = buttonIndexActive;
+					Debug.Log("btn_Light_txt = ON");
+					UIlog_Status.text = "Button = ON";
+				}
+
 			}
+
 			update_btn_LightFlage = -1;
 		}
 
 	}
 
-    private void OnTick(object source, ElapsedEventArgs e)
+	private void OnTick(object source, ElapsedEventArgs e)
 	{
 		//print(e.SignalTime);
-        //receiveNum = 0;
+		//receiveNum = 0;
 
-        //Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-        //tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status.text);
+		//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+		//tempIndex = tagid_status_list.FindIndex(z => z.TagID == log_Status.text);
 
-        //if (tempIndex >= 0)
-        //{
-        //	Debug.Log("OnTick log_Status = " + log_Status.text + ",  index = " + tempIndex);
-        //	UpdateTagIdList(tempIndex);
-        //	//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
-        //	//receiveNum = -2;
-        //}
+		//if (tempIndex >= 0)
+		//{
+		//	Debug.Log("OnTick log_Status = " + log_Status.text + ",  index = " + tempIndex);
+		//	UpdateTagIdList(tempIndex);
+		//	//Debug.Log("tagCnt = " + tagid_status_list.Count.ToString() + "  ListCnt = " + listViewTagID.ItemCount);
+		//	//receiveNum = -2;
+		//}
 
-    }
+	}
 
 	public void getButtonClickMsg(string msg, int itemno)
 	{
 		//////Debug.Log("getButtonClickMsg(msg:)" + msg);
-		Debug.Log("listViewTagID.ItemCount: " + listViewTagID.ItemCount + "   itemno="+ itemno);
+		Debug.Log("listViewTagID.ItemCount: " + listViewTagID.ItemCount + "   itemno=" + itemno);
 		Debug.Log("TagID= " + tagid_status_list[itemno].TagID);
 		UIlog_Status.text = msg;
 		listViewTagIdIndex = itemno;
@@ -472,7 +493,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
 		//Debug.Log("ItemCount: " + listViewVertical.ItemCount);
 		//if (listViewVertical.ItemCount > 0)
-  //      {
+		//      {
 		//	RemoveItemAll(listViewVertical);
 		//}
 
@@ -484,7 +505,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//m_Text.text = "Toggle is : " + m_Toggle.isOn;
 		//Debug.Log("Toggle is : " + change.isOn);
 		Debug.Log("Toggle is : " + change.isOn);
-		if(change.isOn == true)
+		if (change.isOn == true)
 		{
 			if (!_client.IsConnected)
 			{
@@ -493,7 +514,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			}
 		}
 		else
-        {
+		{
 
 			//_client.SendMessage("!disconnect");
 			//running = false;
@@ -515,7 +536,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 	}
 
 
-	public void DropValueChanged(Text  change)
+	public void DropValueChanged(Text change)
 	{
 		String output;
 		//m_Text.text = "Toggle is : " + m_Toggle.isOn;
@@ -544,6 +565,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 
 			Debug.Log(" --- output : " + output);
+			UIlog_Status.text = output;
+			receiveindex = 1;
 
 			//System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 			//string output = regex.Replace(clientMessage, "Bob");
@@ -563,13 +586,13 @@ public class DemoMainCanvas1 : MonoBehaviour
 				}
 			}
 		}
-		catch (SocketException socketException)
+		catch (ArgumentOutOfRangeException outOfRange)
 		{
 			string clientMessage = "Socket Connection is fail !!!";
-			Debug.Log("Socket exception: " + socketException);
+			Debug.Log("outOfRange exception: " + outOfRange);
 			//AddItem(listViewVertical, itemVPrefab, clientMessage);
 			mtxt_Status = GameObject.Find("txt_Status");
-			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + clientMessage;
+			mtxt_Status.GetComponent<Text>().text = "Status - " + outOfRange;
 		}
 
 
@@ -588,27 +611,27 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			string clientMessage = tbx_Txt[index].text;
 
-            if (!string.IsNullOrEmpty(clientMessage))
-            {
-                if (_client.strSendMessage(clientMessage))
-                {
-                    //MessageInputField.text = string.Empty;
-                }
-            }
-            
-            //// Get a stream object for writing.
-            //NetworkStream stream = socketConnection.GetStream();
-            //if (stream.CanWrite)
-            //{
-            //	//string clientMessage = "This is a message from one of your clients.";
-            //	string clientMessage = tbx_Txt[index].text;
-            //	// Convert string message to byte array.
-            //	byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
-            //	// Write byte array to socketConnection stream.
-            //	stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
-            //	Debug.Log("Client sent his message - should be received by server: " + clientMessage);
-            //	//AddItem(listViewVertical, itemVPrefab, clientMessage);
-            //	OnLog(clientMessage);
+			if (!string.IsNullOrEmpty(clientMessage))
+			{
+				if (_client.strSendMessage(clientMessage))
+				{
+					//MessageInputField.text = string.Empty;
+				}
+			}
+
+			//// Get a stream object for writing.
+			//NetworkStream stream = socketConnection.GetStream();
+			//if (stream.CanWrite)
+			//{
+			//	//string clientMessage = "This is a message from one of your clients.";
+			//	string clientMessage = tbx_Txt[index].text;
+			//	// Convert string message to byte array.
+			//	byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
+			//	// Write byte array to socketConnection stream.
+			//	stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+			//	Debug.Log("Client sent his message - should be received by server: " + clientMessage);
+			//	//AddItem(listViewVertical, itemVPrefab, clientMessage);
+			//	OnLog(clientMessage);
 			// }
 		}
 		catch (SocketException socketException)
@@ -629,7 +652,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		Debug.Log("SendButtonGPIO= " + index);
 		//Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
-		if (buttonlock > 0)
+		if (buttonlock > 0  || receiveindex > 0)
         {
 			Debug.Log("SendButtonGPIO buttonlock= " + buttonlock);
 			return;
@@ -678,6 +701,7 @@ public class DemoMainCanvas1 : MonoBehaviour
             }
 
             Debug.Log(" --- output : " + output);
+			UIlog_Status.text = output;
 
 			//System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 			//string output = regex.Replace(clientMessage, "Bob");
@@ -757,10 +781,10 @@ public class DemoMainCanvas1 : MonoBehaviour
 	private void OnClientReceivedMessage(string message)
 	{
 		string finalMessage = message;
-        Debug.Log("OnClientReceivedMessage: " + message);
+		Debug.Log("OnClientReceivedMessage: " + message);
 
-        //CSV 解碼
-        var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
+		//CSV 解碼
+		var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
 		var matches = regex.Matches(finalMessage);
 		int csv_total_fields = matches.Count;
 		string[] ack_data = new string[32];
@@ -785,49 +809,51 @@ public class DemoMainCanvas1 : MonoBehaviour
 		}
 		tag_id = ack_data[2];
 
-		//Debug.Log("tag_id = " + tag_id);
-
-		//item1 = ListView_Test.Find(tag_id);
-
-		//List<string> test = new List<string>();
-		//test.Add(tag_id);
-		//test.Add(finalMessage);
-		//ListView_Test.Add(test);
-
-		//List<string> device_item = new List<string>();    //Tag ID
-
-
-		//item1.Sort();
-		//Debug.Log("item1.Count = " + item1.Count);
-
-		//////if (item1.Contains(tag_id))
-		//////      {
-		//////	Debug.Log("Contains what justAString is set to: " + tag_id);
-		//////}
-		//////else
-		//////      {
-		//////	Debug.Log("Contains what justAString is NULL: " + tag_id);
-		//////	item1.Add(tag_id);
-		//////	item1.Sort();
-		//////	for (int i = 0; i < item1.Count; i++)
-		//////	{
-		//////		Debug.Log(item1[i]);
-		//////		cache = string.Format("<color=red>{0}</color>\n", item1[i]);
-		//////		mListMsg.Add(cache);
-		//////	}
-
-		//////	//cache = string.Format("<color=red>{0}</color>\n", tag_id);
-		//////	//mListMsg.Add(cache);
-		//////}
 		string author1 = "2100";
-		if (String.Equals(tag_id, author1))
+
+        if (String.Equals(tag_id, author1))
         {
 			Debug.Log("tag_id = 2100 compare");
 			update_btn_LightFlage = 1;
-
+			if (receiveindex == 1)
+            {
+				Debug.Log("Other receive");
+			}
+            else
+            {
+				buttonlock = -1;
+			}
+		}
+		else
+        {
+			update_btn_LightFlage = 1;
+			receiveindex = -2;
+			Debug.Log("Code: " + tag_id);
 		}
 
-		buttonlock = -1;
+		//return ;
+
+//////if(receiveindex == 1)
+//////      {
+//////	if (String.Equals(tag_id, author1))
+//////	{
+//////		Debug.Log("tag_id = 2100 compare");
+//////		update_btn_LightFlage = 1;
+//////		receiveindex = -2;
+//////	}
+//////}
+//////      else
+//////      {
+//////	if (String.Equals(tag_id, author1))
+//////	{
+//////		Debug.Log("tag_id = 2100 compare");
+//////		update_btn_LightFlage = 1;
+
+//////	}
+//////	buttonlock = -1;
+//////}
+
+#if false
 		tempIndex = tagActiveReportStatusList.FindIndex(z => z.TagID == tag_id);
 		//Debug.Log("tempIndex... : " + tempIndex);
 		if( tempIndex == -1)
@@ -877,7 +903,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 			Debug.Log(tagActiveReportStatusList[tempIndex].TagID + "   |   " + tagActiveReportStatus.Counts);
 		}
-
+#endif
 	}
 	public void AddMsg()
     {
