@@ -409,6 +409,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 			}
 			else
 			{
+				Debug.Log("lastindex = " + lastindex + "    ,buttonIndexActive = " + buttonIndexActive);
 				if (lastindex == buttonIndexActive)
 				{
 					Image_light[lastindex].SetActive(true);
@@ -430,7 +431,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 					btn_Light_txt[buttonIndexActive].text = "ON";
 					lastindex = buttonIndexActive;
 					Debug.Log("btn_Light_txt = ON");
-					UIlog_Status.text = "Button = ON";
+					UIlog_Status.text = "Button light = ON";
 				}
 
 			}
