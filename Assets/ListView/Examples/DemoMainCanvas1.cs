@@ -416,7 +416,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 					lastindex = -1;
 					buttonIndexActive = -1;
 					Debug.Log("btn_Light_txt = OFF");
-					UIlog_Status.text = "Button = OFF";
+					UIlog_Status.text = "Button light = OFF";
 				}
 				else
 				{
@@ -736,11 +736,13 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public void ConnectClient()
 	{
+		string message;
 		if (!_client.IsConnected)
 		{
 			Debug.Log("ConnectClient()....");
 			this.OnClientLog("ConnectClient()....");
-
+			message = string.Format("Connecting to {0}:{1}", tbx_IpAddr.text, tbx_Port.text);
+			UIlog_Status.text = message;
 			_client.IPAddress = tbx_IpAddr.text;
 			int.TryParse(tbx_Port.text, out _client.Port);
 			_client.ConnectToTcpServer();
@@ -753,6 +755,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			this.OnClientLog("DisconnectClient()....");
 			Debug.Log("DisconnectClient()....");
+			UIlog_Status.text = "DisconnectClient()....";
 			_client.CloseConnection();
 		}
 	}

@@ -55,7 +55,6 @@ public class TCPTestClient : MonoBehaviour
 			OnConnected(this);
 			//OnLog("Connected");
 			OnLog(string.Format("Connecting to {0}:{1}", IPAddress, Port));
-
 			Byte[] bytes = new Byte[1024];
 			running = true;
 			while (running)
