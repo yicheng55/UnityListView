@@ -412,8 +412,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 				Debug.Log("lastindex = " + lastindex + "    ,buttonIndexActive = " + buttonIndexActive);
 				if (lastindex == buttonIndexActive)
 				{
-					Image_light[lastindex].SetActive(true);
-					btn_Light_txt[lastindex].text = "OFF";
+					//Image_light[lastindex].SetActive(true);
+                    LightManager.instance.TurnOff(lastindex);
+                    //btn_Light_txt[lastindex].text = "OFF";
 					lastindex = -1;
 					buttonIndexActive = -1;
 					Debug.Log("btn_Light_txt = OFF");
@@ -423,12 +424,14 @@ public class DemoMainCanvas1 : MonoBehaviour
 				{
 					if (lastindex >= 0)
 					{
-						Image_light[lastindex].SetActive(true);
-						btn_Light_txt[lastindex].text = "OFF";
+						//Image_light[lastindex].SetActive(true);
+						//btn_Light_txt[lastindex].text = "OFF";
+						LightManager.instance.TurnOff(lastindex);
 					}
 					////buttonIndexActive = index;
-					Image_light[buttonIndexActive].SetActive(false);
-					btn_Light_txt[buttonIndexActive].text = "ON";
+					//Image_light[buttonIndexActive].SetActive(false);
+					//btn_Light_txt[buttonIndexActive].text = "ON";
+					LightManager.instance.TurnOn(buttonIndexActive);
 					lastindex = buttonIndexActive;
 					Debug.Log("btn_Light_txt = ON");
 					UIlog_Status.text = "Button light = ON";
@@ -1083,7 +1086,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		};
 		Debug.Log("AddItem msg: " + msg);
-		var item = Instantiate(prefab);
+		var item = Instantiate(prefab,lv.transform.position,Quaternion.identity);
 
 		if (msg == "")
 		{
