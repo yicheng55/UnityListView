@@ -211,33 +211,43 @@ public class DemoMainCanvas1 : MonoBehaviour
 			{
 				//Debug.Log(line);
 				//Debug.Log(" - invalid");
-				switch (index)
-				{
-					//case 0:
-					//	//tbx_IpAddr.text = line;
-					//	//Debug.Log("Case= " + index + "  line: " + line);
-					//	//break;
-					//case 1:
-					//	//tbx_Port.text = line;
-					//	//Debug.Log("Case= " + index + "  line: " + line);
-					//	//break;
-					case int n when (n < 20):
-						//tbx_Txt[index - 2].text = line;
-						//tagActiveReportStatus.TagID = line;
-						//tagActiveReportStatusList.Add(tagActiveReportStatus);
-						////AddItem(listViewVertical, itemVPrefab, index.ToString());
-						///
-						tagidListStatus.TagID = line;
-						tagid_status_list.Add(tagidListStatus);
-						//AddItem(listViewTagID, itemVPrefab, line);
-						//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
-						Debug.Log("Case= " + index + "  line: " + line);
-						break;
+				//////switch (index)
+				//////{
+				//////	//case 0:
+				//////	//	//tbx_IpAddr.text = line;
+				//////	//	//Debug.Log("Case= " + index + "  line: " + line);
+				//////	//	//break;
+				//////	//case 1:
+				//////	//	//tbx_Port.text = line;
+				//////	//	//Debug.Log("Case= " + index + "  line: " + line);
+				//////	//	//break;
+				//////	case int n when (n < 20):
+				//////		//tbx_Txt[index - 2].text = line;
+				//////		//tagActiveReportStatus.TagID = line;
+				//////		//tagActiveReportStatusList.Add(tagActiveReportStatus);
+				//////		////AddItem(listViewVertical, itemVPrefab, index.ToString());
+				//////		///
+				//////		tagidListStatus.TagID = line;
+				//////		tagid_status_list.Add(tagidListStatus);
+				//////		//AddItem(listViewTagID, itemVPrefab, line);
+				//////		//Debug.Log("tagActiveReportStatusList = " + tagActiveReportStatusList.Count.ToString());
+				//////		Debug.Log("Case= " + index + "  line: " + line);
+				//////		break;
 
-					default:
-						Debug.Log("Case= " + index + "  line: " + line);
-						break;
+				//////	default:
+				//////		Debug.Log("Case= " + index + "  line: " + line);
+				//////		break;
+				//////}
+
+				if (String.Equals(line, "END"))
+				{
+					Debug.Log("index= " + index + "  line: " + line);
+					break;
 				}
+
+				tagidListStatus.TagID = line;
+				tagid_status_list.Add(tagidListStatus);
+				Debug.Log("index= " + index + "  line: " + line);
 				index++;
 			}
 
