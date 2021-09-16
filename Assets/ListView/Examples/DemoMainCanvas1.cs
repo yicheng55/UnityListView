@@ -668,7 +668,7 @@ public class DemoMainCanvas1 : MonoBehaviour
 		//Debug.Log("SendButtonGPIO serverMessage= " + serverMessage);
 		if (buttonlock > 0  || receiveindex > 0)
         {
-			Debug.Log("SendButtonGPIO buttonlock= " + buttonlock);
+			Debug.Log("SendButtonGPIO buttonlock= " + buttonlock + "  receiveindex= " + receiveindex);
 			return;
 		}
 
@@ -845,6 +845,7 @@ public class DemoMainCanvas1 : MonoBehaviour
         {
 			update_btn_LightFlage = 1;
 			receiveindex = -2;
+			buttonlock = -1;
 			Debug.Log("Code: " + tag_id);
 		}
 
