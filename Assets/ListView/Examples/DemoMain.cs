@@ -180,77 +180,69 @@ public class DemoMain : MonoBehaviour
 		//	}
 		//}
 
-		if(receiveNum > -2)
-        {
-			if(receiveNum >=0 )
-            {
-				UpdateMsg(receiveNum);
-            }
-			//////else
-   //////         {
-			//////	AddMsg();
-   //////         }
-			//////if (tagActiveReportStatusList.Count != listViewVertical.ItemCount)
-   //////         {
-			//////	AddMsg();
-			//////}
-			txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
-			receiveNum = -2;
-        }
-
-		//if (Input.GetKeyDown(KeyCode.H))
-		//{
-		//    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
-		//    {
-		//        RemoveItem(listViewHorizontal);
-		//    }
-		//    else // h: add
-		//    {
-		//        AddItem(listViewHorizontal, itemHPrefab);
-		//    }
-		//}
-
-
-		//if(mListMsg.Count > 0)
-		//{
-  //          //RemoveItemAll(listViewVertical);
-  //          for (int i=0; i < mListMsg.Count; i++)
+		//if(receiveNum > -2)
+  //      {
+		//	if(receiveNum >=0 )
   //          {
-  //              Debug.Log(mListMsg[i]);
-  //              AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+		//		UpdateMsg(receiveNum);
+  //          }
+		//	txt_Status.text = "tagCnt = " + tagActiveReportStatusList.Count.ToString() + "  ListCnt = " + listViewVertical.ItemCount;
+		//	receiveNum = -2;
+  //      }
 
-		//	}
-		//	//foreach (string myStringList in mListMsg)  //error bug.
-		//	//{
-		//	//	Debug.Log(myStringList);
-		//	//	AddItem(listViewVertical, itemVPrefab, myStringList);
-		//	//}
-		//	mListMsg.Clear();
-		//}
-		if(statusMsg.Count > 0)
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    if (Input.GetKey(KeyCode.LeftShift)) // shift + h: remove
+        //    {
+        //        RemoveItem(listViewHorizontal);
+        //    }
+        //    else // h: add
+        //    {
+        //        AddItem(listViewHorizontal, itemHPrefab);
+        //    }
+        //}
+
+
+        if (mListMsg.Count > 0)
         {
-			txt_Status.text = "";
-			for (int i = 0; i<statusMsg.Count; i++)
+            //RemoveItemAll(listViewVertical);
+            for (int i = 0; i < mListMsg.Count; i++)
             {
-				//AddMsg(statusMsg[i]);
-				txt_Status.text += statusMsg[i];
-			}
-			statusMsg.Clear();
+                Debug.Log(mListMsg[i]);
+                AddItem(listViewVertical, itemVPrefab, mListMsg[i]);
+
+            }
+            //foreach (string myStringList in mListMsg)  //error bug.
+            //{
+            //	Debug.Log(myStringList);
+            //	AddItem(listViewVertical, itemVPrefab, myStringList);
+            //}
+            mListMsg.Clear();
         }
+        //if(statusMsg.Count > 0)
+        //      {
+        //	txt_Status.text = "";
+        //	for (int i = 0; i<statusMsg.Count; i++)
+        //          {
+        //		//AddMsg(statusMsg[i]);
+        //		txt_Status.text += statusMsg[i];
+        //	}
+        //	statusMsg.Clear();
+        //      }
 
-		//Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
-		//lock (cacheLock)
-		//{
-		//	if (!string.IsNullOrEmpty(cache))
-		//	{
-		//		//TextWindow.text += string.Format("{0}", cache);
-		//		AddItem(listViewVertical, itemVPrefab, cache);
-		//		cache = null;
-		//	}
-		//}
+        //Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
+        //lock (cacheLock)
+        //{
+        //	if (!string.IsNullOrEmpty(cache))
+        //	{
+        //		//TextWindow.text += string.Format("{0}", cache);
+        //		AddItem(listViewVertical, itemVPrefab, cache);
+        //		cache = null;
+        //	}
+        //}
 
 
-	}
+    }
 
 	private void OnTick(object source, ElapsedEventArgs e)
 	{
@@ -401,7 +393,27 @@ public class DemoMain : MonoBehaviour
 	////	}
 	////}
 
+	private void OnClientReceivedMessage(string message)
+	{
+		string finalMessage = message;
+		Debug.Log("OnClientLog: " + message);
+		lock (cacheLock)
+		{
+			//if (string.IsNullOrEmpty(cache))
+			//{
+			//	cache = string.Format("<color=green>{0}</color>\n", finalMessage);
+			//}
+			//else
+			//{
+			//	cache += string.Format("<color=green>{0}</color>\n", finalMessage);
+			//}
 
+			cache = string.Format("<color=red>{0}</color>\n", finalMessage);
+			mListMsg.Add(cache);
+		}
+	}
+
+#if false
 	private void OnClientReceivedMessage(string message)
 	{
 		string finalMessage = message;
@@ -561,6 +573,8 @@ public class DemoMain : MonoBehaviour
 
 
 	}
+#endif
+
 	public void AddMsg()
     {
 		AddItem(listViewVertical, itemVPrefab, mListMsg[mListMsg.Count-1]);
