@@ -219,16 +219,17 @@ public class DemoMain : MonoBehaviour
             //}
             mListMsg.Clear();
         }
-        //if(statusMsg.Count > 0)
-        //      {
-        //	txt_Status.text = "";
-        //	for (int i = 0; i<statusMsg.Count; i++)
-        //          {
-        //		//AddMsg(statusMsg[i]);
-        //		txt_Status.text += statusMsg[i];
-        //	}
-        //	statusMsg.Clear();
-        //      }
+
+        if (statusMsg.Count > 0)
+        {
+            txt_Status.text = "";
+            for (int i = 0; i < statusMsg.Count; i++)
+            {
+                //AddMsg(statusMsg[i]);
+                txt_Status.text += statusMsg[i];
+            }
+            statusMsg.Clear();
+        }
 
         //Debug.Log("listViewVertical =" + listViewVertical.FindItems( ) );
         //lock (cacheLock)
