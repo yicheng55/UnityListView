@@ -522,6 +522,9 @@ public class DemoMainCanvas1 : MonoBehaviour
 		string sPattern = "^#";
 		string filename;
 
+		//MessageBoxButtons buttons = MessageBoxButtons.OK;
+		//MessageBox.Show(" Input TAG_ID warning!!! ", "Warning...    ", buttons);   //MessageBox.Show Test OK.
+
 		OpenFileDialog dialog = new OpenFileDialog();
 		dialog.Filter = "exe files (*.cfg)|*.cfg";  //过滤文件类型  
 		dialog.InitialDirectory = ".";  //定义打开的默认文件夹位置，可以在显示对话框之前设置好各种属性  
@@ -529,6 +532,8 @@ public class DemoMainCanvas1 : MonoBehaviour
 		{
 			filename = dialog.FileName;
 			Debug.Log(filename);
+			tagid_status_list.Clear();
+			RemoveItemAll(listViewTagID);
 
 			System.IO.StreamReader file = new System.IO.StreamReader(@filename);
 			while ((line = file.ReadLine()) != null)
