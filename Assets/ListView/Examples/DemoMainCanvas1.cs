@@ -517,12 +517,68 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 	public void OpenFileButton()
 	{
+		int counter = 0, index = 0;
+		string line;
+		string sPattern = "^#";
+		string filename;
+
 		OpenFileDialog dialog = new OpenFileDialog();
 		dialog.Filter = "exe files (*.cfg)|*.cfg";  //过滤文件类型  
 		dialog.InitialDirectory = ".";  //定义打开的默认文件夹位置，可以在显示对话框之前设置好各种属性  
 		if (dialog.ShowDialog() == DialogResult.OK)
 		{
-			Debug.Log(dialog.FileName);
+			filename = dialog.FileName;
+			Debug.Log(filename);
+
+			System.IO.StreamReader file = new System.IO.StreamReader(@filename);
+			while ((line = file.ReadLine()) != null)
+			{
+				if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
+				{
+					Debug.Log(" - valid");
+				}
+				else
+				{
+
+					if (String.Equals(line, "END"))
+					{
+						Debug.Log("index= " + index + "  line: " + line);
+						break;
+					}
+
+					tagidListStatus.TagID = line;
+					tagid_status_list.Add(tagidListStatus);
+					Debug.Log("index= " + index + "  line: " + line);
+					index++;
+				}
+			}
+
+			file.Close();
+			tagid_status_list = tagid_status_list.OrderBy(sel => sel.TagID).ToList();       //using System.Linq;
+
+			Debug.Log("TagidList.cfg were lines=" + counter);
+			Debug.Log("tagid_status_list = " + tagid_status_list.Count.ToString());
+
+
+			counter = 0;
+			foreach (TAGID_LIST_STATUS myStringList in tagid_status_list)
+			{
+				//Debug.Log(myStringList.TagID);
+				cache = counter.ToString("000") + "   |   " + myStringList.TagID;
+				AddItem(listViewTagID, itemVPrefab, cache, counter);
+				counter++;
+			}
+
+			//this.OnClientLog("Start...............");
+			mtxt_Status = GameObject.Find("txt_Status");
+			mtxt_Status.GetComponent<Text>().text = "TextStatus - " + "Start...............";
+			Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
+			//mDropWakeUpSec.captionText.text = "Select";
+			//mDropWakeUpSec.value = 10;
+			Debug.Log("mDropWakeUpSec.captionText.text =" + mDropWakeUpSec.captionText.text);
+
+			Debug.Log("statusMsg.Count: " + statusMsg.Count);
+
 		}
 	}
 
