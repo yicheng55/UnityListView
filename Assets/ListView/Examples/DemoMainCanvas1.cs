@@ -12,7 +12,7 @@ using System.Timers;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
-
+using System.Windows.Forms;
 
 public class DemoMainCanvas1 : MonoBehaviour
 {
@@ -513,6 +513,20 @@ public class DemoMainCanvas1 : MonoBehaviour
 
 		ConnectClient();
 	}
+
+
+	public void OpenFileButton()
+	{
+		OpenFileDialog dialog = new OpenFileDialog();
+		dialog.Filter = "exe files (*.exe)|*.exe";  //过滤文件类型  
+		dialog.InitialDirectory = "F:\\";  //定义打开的默认文件夹位置，可以在显示对话框之前设置好各种属性  
+		if (dialog.ShowDialog() == DialogResult.OK)
+		{
+			Debug.Log(dialog.FileName);
+		}
+	}
+
+
 
 	void ToggleValueChanged(Toggle change)
 	{
