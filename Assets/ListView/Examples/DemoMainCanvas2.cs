@@ -138,7 +138,6 @@ public class DemoMainCanvas2 : MonoBehaviour
 		aTimer.Elapsed += new ElapsedEventHandler(OnTick);
 		aTimer.Start();
 
-
 		string sPattern = "^#";
 		// Read the file and display it line by line.  
 		System.IO.StreamReader file = new System.IO.StreamReader(@"tcpclient.cfg");
@@ -186,7 +185,6 @@ public class DemoMainCanvas2 : MonoBehaviour
 					default:
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
-
 
 				}
 				index++;
