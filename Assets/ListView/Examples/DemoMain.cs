@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System.Text;
 using System.Net;
 using System.Timers;
+using System.Windows.Forms;
 
 public class DemoMain : MonoBehaviour
 {
@@ -93,16 +94,6 @@ public class DemoMain : MonoBehaviour
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 
-					//case 2:
-					//case 3:
-					//case 4:
-					//case 5:
-					//case 6:
-					//case 7:
-					//case 8:
-					//case 9:
-					//case 10:
-					//case 11:
 					case int n when (n < 20 && n >= 2):
 						tbx_Txt[index - 2].text = line;
 						Debug.Log("Case= " + index + "  line: " + line);
@@ -203,6 +194,69 @@ public class DemoMain : MonoBehaviour
 	//	aTimer.Dispose();
 	//	print(aTimer == null);
 	//}
+
+	public void OpenFileButton()
+	{
+		int counter = 0, index = 0;
+		string line;
+		string filename;
+
+		OpenFileDialog dialog = new OpenFileDialog();
+		//dialog.Filter = "exe files (*.exe)|*.exe";  //餈皛斗隞嗥掩å  
+		//dialog.InitialDirectory = "F:\\";  //摰銋æ撘ç暺霈斗隞嗅允雿蝵殷¼å臭誑å冽曄內撖寡¯獢銋å霈曄蔭憟賢蝘撅æ§  
+
+		dialog.Filter = "exe files (*.cfg)|*.cfg";  //餈皛斗隞嗥掩å  
+		dialog.InitialDirectory = ".";  //摰銋æ撘ç暺霈斗隞嗅允雿蝵殷¼å臭誑å冽曄內撖寡¯獢銋å霈曄蔭憟賢蝘撅æ§  
+		if (dialog.ShowDialog() == DialogResult.OK)
+		{
+			Debug.Log(dialog.FileName);
+			filename = dialog.FileName;
+			string sPattern = "^#";
+			// Read the file and display it line by line.  
+			System.IO.StreamReader file = new System.IO.StreamReader(@filename);
+			while ((line = file.ReadLine()) != null)
+			{
+				if (System.Text.RegularExpressions.Regex.IsMatch(line, sPattern))
+				{
+					Debug.Log(" - valid");
+				}
+				else
+				{
+					//Debug.Log(line);
+					//Debug.Log(" - invalid");
+					switch (index)
+					{
+						case 0:
+							tbx_IpAddr.text = line;
+							Debug.Log("Case= " + index + "  line: " + line);
+							break;
+						case 1:
+							tbx_Port.text = line;
+							Debug.Log("Case= " + index + "  line: " + line);
+							break;
+
+						case int n when (n < 20 && n >= 2):
+							tbx_Txt[index - 2].text = line;
+							Debug.Log("Case= " + index + "  line: " + line);
+							break;
+
+						default:
+							Debug.Log("Case= " + index + "  line: " + line);
+							break;
+
+
+					}
+					index++;
+				}
+
+				counter++;
+			}
+
+			file.Close();
+			Debug.Log("There were lines=" + counter);
+		}
+   }
+
 
 	public void ConnectButton()
 	{
