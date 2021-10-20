@@ -94,7 +94,7 @@ public class DemoMain : MonoBehaviour
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
 
-					case int n when (n < 20 && n >= 2):
+					case int n when (n < 22 && n >= 2):
 						tbx_Txt[index - 2].text = line;
 						Debug.Log("Case= " + index + "  line: " + line);
 						break;
@@ -228,20 +228,20 @@ public class DemoMain : MonoBehaviour
 					{
 						case 0:
 							tbx_IpAddr.text = line;
-							Debug.Log("Case= " + index + "  line: " + line);
+							Debug.Log("Case index= " + index + "  line: " + line);
 							break;
 						case 1:
 							tbx_Port.text = line;
-							Debug.Log("Case= " + index + "  line: " + line);
+							Debug.Log("Case index= " + index + "  line: " + line);
 							break;
 
-						case int n when (n < 20 && n >= 2):
+						case int n when (n < 22 && n >= 2):
 							tbx_Txt[index - 2].text = line;
-							Debug.Log("Case= " + index + "  line: " + line);
+							Debug.Log("Case index= " + index + ",    line: " + line);
 							break;
 
 						default:
-							Debug.Log("Case= " + index + "  line: " + line);
+							Debug.Log("Case  index= " + index + "  line: " + line);
 							break;
 
 
@@ -319,7 +319,9 @@ public class DemoMain : MonoBehaviour
 		{
 			string clientMessage = tbx_Txt[index].text;
 
-            if (!string.IsNullOrEmpty(clientMessage))
+			Debug.Log("SendButton() ;  " + clientMessage);
+
+			if (!string.IsNullOrEmpty(clientMessage))
             {
                 if (_client.strSendMessage(clientMessage))
                 {
