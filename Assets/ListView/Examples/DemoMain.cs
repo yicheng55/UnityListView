@@ -10,6 +10,7 @@ using System.Text;
 using System.Net;
 using System.Timers;
 using System.Windows.Forms;
+using UnityEditor;
 
 public class DemoMain : MonoBehaviour
 {
@@ -59,11 +60,21 @@ public class DemoMain : MonoBehaviour
 		int counter = 0, index=0;
 		string line;
 
+        MessageBoxButtons buttons = MessageBoxButtons.OK;
+		//MessageBox.Show(" Input TAG_ID warning!!! ", "Warning...    ", buttons);   //MessageBox.Show Test OK.
+		if (MessageBox.Show("Delete this user?", "Confirm Message", MessageBoxButtons.OKCancel) == DialogResult.OK)
+		{
+			//delete
+			Debug.Log("Delete this user?" + "Confirm Message ..OK");
+		}
 
-        //Fetch the Toggle GameObject
-        //m_ToggleConnect = GetComponent<Toggle>();
-        //Add listener for when the state of the Toggle changes, and output the state
-        m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
+		//EditorUtility.DisplayDialog("title", "content", "确认", "取消");
+
+
+		//Fetch the Toggle GameObject
+		//m_ToggleConnect = GetComponent<Toggle>();
+		//Add listener for when the state of the Toggle changes, and output the state
+		m_ToggleConnect.onValueChanged.AddListener(delegate { ToggleValueChanged(m_ToggleConnect); });
 
 
 		aTimer = new System.Timers.Timer(200);
