@@ -62,7 +62,7 @@ public class DemoMain : MonoBehaviour
 
         MessageBoxButtons buttons = MessageBoxButtons.OK;
 		//MessageBox.Show(" Input TAG_ID warning!!! ", "Warning...    ", buttons);   //MessageBox.Show Test OK.
-		if (MessageBox.Show("Delete this user?", "Confirm Message", MessageBoxButtons.OKCancel) == DialogResult.OK)
+		if (MessageBox.Show(new Form() { TopMost = true }, "Delete this user?", "Confirm Message", MessageBoxButtons.OKCancel) == DialogResult.OK)
 		{
 			//delete
 			Debug.Log("Delete this user?" + "Confirm Message ..OK");
@@ -218,7 +218,7 @@ public class DemoMain : MonoBehaviour
 
 		dialog.Filter = "exe files (*.cfg)|*.cfg";  //餈皛斗隞嗥掩å  
 		dialog.InitialDirectory = ".";  //摰銋æ撘ç暺霈斗隞嗅允雿蝵殷¼å臭誑å冽曄內撖寡¯獢銋å霈曄蔭憟賢蝘撅æ§  
-		if (dialog.ShowDialog() == DialogResult.OK)
+		if (dialog.ShowDialog(new Form() { TopMost = true, TopLevel = true }) == DialogResult.OK)
 		{
 			Debug.Log(dialog.FileName);
 			filename = dialog.FileName;
